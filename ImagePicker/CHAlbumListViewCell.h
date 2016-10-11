@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
+@class CHAlbumModel;
 @interface CHAlbumListViewCell : UITableViewCell
-
+@property (nonatomic, strong) CHAlbumModel *albumModel;
 @end

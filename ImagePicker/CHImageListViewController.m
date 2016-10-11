@@ -7,92 +7,250 @@
 //
 
 #import "CHImageListViewController.h"
+#import "CHImageListViewCell.h"
+#import "CHImageManager.h"
+#import "CHImageBrowserViewController.h"
+#import "CHImageListBottomToolBar.h"
+#import "CHImagePickerViewController.h"
+#import "CHAssetModel.h"
 
-@interface CHImageListViewController ()
+@interface CHImageListViewController () <UICollectionViewDelegateFlowLayout, UICollectionViewDataSource, CHImageBrowserViewControllerDelegate>
+@property (nonatomic, weak) UICollectionView *collectionView;
+@property (nonatomic, strong) NSArray *assetModelArray;
+@property (nonatomic, assign) NSInteger currentIndex;
+@property (nonatomic, weak) CHImageListBottomToolBar *toolBar;
 
 @end
 
+static NSString *const cellID = @"cellID";
 @implementation CHImageListViewController
 
-static NSString * const reuseIdentifier = @"Cell";
+- (instancetype)initWithCurrentIndex:(NSInteger)currentIndex {
+    if (self = [super init]) {
+        _currentIndex = currentIndex;
+    }
+    return self;
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    // Uncomment the following line to preserve selection between presentations
-    // self.clearsSelectionOnViewWillAppear = NO;
+    UINib *cellNib = [UINib nibWithNibName:NSStringFromClass([CHImageListViewCell class]) bundle:nil];
+    [self.collectionView registerNib:cellNib forCellWithReuseIdentifier:cellID];
     
-    // Register cell classes
-    [self.collectionView registerClass:[UICollectionViewCell class] forCellWithReuseIdentifier:reuseIdentifier];
+    // 获取本相册所有的相片 然后展示
+    [[CHImageManager defaultManager] allAssetModelsWithAlbumModel:self.albumModel captureHandle:^(CHImageManager *defaultManager, NSArray<CHAssetModel *> *assetModelArray) {
+        
+        // 当前界面的所有图片数据模型
+        self.assetModelArray = assetModelArray;
+        
+        // 筛选已经选择过的
+        CHImagePickerViewController *imagePickerViewController = (CHImagePickerViewController *)self.navigationController;
+        // PHPhotoKit
+        NSMutableArray *selectAssets = [NSMutableArray new];
+        // AL
+        NSMutableArray *selectAssetURLs = [NSMutableArray new];
+        
+        // 遍历已经选中的,看看是否是否存在
+        
+        for (int i = 0; i < imagePickerViewController.assetModelArray.count; i++) {
+            CHAssetModel *assetModel = imagePickerViewController.assetModelArray[i];
+            id asset = assetModel.asset;
+            if ([asset isKindOfClass:[PHAsset class]]) {
+                [selectAssets addObject:asset];
+            } else if ([asset isKindOfClass:[ALAsset class]]) {
+                ALAsset *alAsset = (ALAsset *)assetModel.asset;
+                [selectAssetURLs addObject:[alAsset valueForProperty:ALAssetPropertyURLs]];
+            }
+        }
+        
+        for (CHAssetModel *assetModel in assetModelArray) {
+            id asset = assetModel.asset;
+            if ([asset isKindOfClass:[PHAsset class]]) {
+                if ([selectAssets containsObject:asset]) {
+                    assetModel.selectType = CHAssetModelSelectTypeSelected;
+                } else {
+                    assetModel.selectType = CHAssetModelSelectTypeUnSelect;
+                }
+            } else if ([asset isKindOfClass:[ALAsset class]]) {
+                ALAsset *alAsset = (ALAsset *)assetModel.asset;
+                if ([selectAssetURLs containsObject:[alAsset valueForProperty:ALAssetPropertyURLs]]) {
+                    assetModel.selectType = CHAssetModelSelectTypeSelected;
+                } else {
+                    assetModel.selectType = CHAssetModelSelectTypeUnSelect;
+                }
+            }
+        }
+        
+        [self.collectionView reloadData];
+    }];
+}
+
+- (void)viewDidLayoutSubviews {
+    [super viewDidLayoutSubviews];
+    self.collectionView.frame = CGRectMake(0, 0, self.view.frame.size.width, [UIScreen mainScreen].bounds.size.height - 64 - 50);
+    self.toolBar.frame = CGRectMake(0, self.collectionView.frame.origin.y + self.collectionView.frame.size.height, self.view.frame.size.width, 50);
+}
+
+- (void)gotoPreViewWithIndex:(NSInteger)index {
+    CHImageBrowserViewController *browserViewController = [[CHImageBrowserViewController alloc] init];
+    browserViewController.assetModelArray = self.assetModelArray;
+    browserViewController.currentIndex = index;
+    browserViewController.delegate = self;
+    [self.navigationController pushViewController:browserViewController animated:YES];
+}
+
+- (void)callBackHandleWithAssetModel:(CHAssetModel *)assetM {
+    [self handleAssetModel:assetM];
+}
+
+- (void)handleAssetModel:(CHAssetModel *)assetM {
+    CHImagePickerViewController *imagePickerViewController = (CHImagePickerViewController *)self.navigationController;
     
-    // Do any additional setup after loading the view.
+    // 处理选中图片
+    NSMutableArray *selectAssetModelArray = imagePickerViewController.assetModelArray.mutableCopy;
+    NSMutableArray *selectAssets = [NSMutableArray new];
+    NSMutableArray *selectAssetURLs = [NSMutableArray new];
+    
+    if (imagePickerViewController.assetModelArray.count == 0) {
+        [imagePickerViewController.assetModelArray addObject:assetM];
+    } else {
+        
+        for (int i = 0; i < selectAssetModelArray.count; i++) {
+            CHAssetModel *assetModel = selectAssetModelArray[i];
+            id asset = assetModel.asset;
+            if ([asset isKindOfClass:[PHAsset class]]) {
+                [selectAssets addObject:asset];
+                if ([selectAssets containsObject:assetM.asset] && assetM.selectType == CHAssetModelSelectTypeUnSelect) {
+                    [imagePickerViewController.assetModelArray removeObject:assetModel];
+                    [selectAssetModelArray removeObject:assetModel];
+                    [selectAssets removeObject:asset];
+                } else {
+                    if (assetM.selectType == CHAssetModelSelectTypeSelected) {
+                        if (![imagePickerViewController.assetModelArray containsObject:assetM]) {
+                            [imagePickerViewController.assetModelArray addObject:assetM];
+                        }
+                    }
+                }
+            } else if ([asset isKindOfClass:[ALAsset class]]) {
+                ALAsset *alAsset = (ALAsset *)asset;
+                [selectAssetURLs addObject:[alAsset valueForProperty:ALAssetPropertyURLs]];
+                if ([selectAssetURLs containsObject:[alAsset valueForProperty:ALAssetPropertyURLs]] && assetM.selectType == CHAssetModelSelectTypeUnSelect) {
+                    [imagePickerViewController.assetModelArray removeObject:assetModel];
+                    [selectAssetModelArray removeObject:assetModel];
+                    [selectAssetURLs removeObject:[alAsset valueForProperty:ALAssetPropertyURLs]];
+                } else {
+                    if (assetM.selectType == CHAssetModelSelectTypeSelected) {
+                        if (![imagePickerViewController.assetModelArray containsObject:assetM]) {
+                            [imagePickerViewController.assetModelArray addObject:assetM];
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
+    NSLog(@"assetModelArray=%@", imagePickerViewController.assetModelArray);
 }
 
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
-
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
-
-#pragma mark <UICollectionViewDataSource>
-
+#pragma mark - UICollectionViewDelegateFlowLayout, UICollectionViewDataSource
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView {
-#warning Incomplete implementation, return the number of sections
-    return 0;
+    return 1;
 }
-
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
-#warning Incomplete implementation, return the number of items
-    return 0;
+    return self.assetModelArray.count;
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
-    UICollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:reuseIdentifier forIndexPath:indexPath];
     
-    // Configure the cell
+    // 1. 创建cell
+    CHImageListViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:cellID forIndexPath:indexPath];
     
+    // 2. 设置数据
+    cell.assetModel = self.assetModelArray[indexPath.item];
+    
+    __weak typeof(self) weakSelf = self;
+    cell.selectHandle = ^(CHImageListViewCell *cell, CHAssetModel *assetModel) {
+        __strong typeof(self) strongSelf = weakSelf;
+        [strongSelf callBackHandleWithAssetModel:assetModel];
+    };
+    
+    // 3. 返回cell
     return cell;
 }
 
-#pragma mark <UICollectionViewDelegate>
-
-/*
-// Uncomment this method to specify if the specified item should be highlighted during tracking
-- (BOOL)collectionView:(UICollectionView *)collectionView shouldHighlightItemAtIndexPath:(NSIndexPath *)indexPath {
-	return YES;
-}
-*/
-
-/*
-// Uncomment this method to specify if the specified item should be selected
-- (BOOL)collectionView:(UICollectionView *)collectionView shouldSelectItemAtIndexPath:(NSIndexPath *)indexPath {
-    return YES;
-}
-*/
-
-/*
-// Uncomment these methods to specify if an action menu should be displayed for the specified item, and react to actions performed on the item
-- (BOOL)collectionView:(UICollectionView *)collectionView shouldShowMenuForItemAtIndexPath:(NSIndexPath *)indexPath {
-	return NO;
+- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
+    [self gotoPreViewWithIndex:indexPath.item];
 }
 
-- (BOOL)collectionView:(UICollectionView *)collectionView canPerformAction:(SEL)action forItemAtIndexPath:(NSIndexPath *)indexPath withSender:(id)sender {
-	return NO;
+#pragma mark - CHImageBrowserViewControllerDelegate
+- (void)imageBrowserViewController:(CHImageBrowserViewController *)imageBrowserViewController assetModelSelectTypeDidChange:(CHAssetModel *)assetModel index:(NSInteger)index {
+    
+    CHAssetModel *currentAssetModel = self.assetModelArray[index];
+    currentAssetModel.selectType = assetModel.selectType;
+    [self.collectionView reloadItemsAtIndexPaths:@[[NSIndexPath indexPathForItem:index inSection:0]]];
+    [self handleAssetModel:assetModel];
 }
 
-- (void)collectionView:(UICollectionView *)collectionView performAction:(SEL)action forItemAtIndexPath:(NSIndexPath *)indexPath withSender:(id)sender {
-	
+- (UICollectionView *)collectionView {
+    if (!_collectionView) {
+        UICollectionViewFlowLayout *layout = [UICollectionViewFlowLayout new];
+        CGFloat itemWH = self.view.frame.size.width / 3.0;
+        layout.itemSize = CGSizeMake(itemWH, itemWH);
+        layout.minimumLineSpacing = 0.0;
+        layout.minimumInteritemSpacing = 0.0;
+        layout.sectionInset = UIEdgeInsetsZero;
+        
+        UICollectionView *collectionView = [[UICollectionView alloc] initWithFrame:self.view.bounds collectionViewLayout:layout];
+        [self.view addSubview:collectionView];
+        _collectionView = collectionView;
+        collectionView.backgroundColor = [UIColor whiteColor];
+        collectionView.delegate = self;
+        collectionView.dataSource = self;
+    }
+    return _collectionView;
 }
-*/
 
+- (NSArray *)assetModelArray {
+    if (!_assetModelArray) {
+        _assetModelArray = [NSArray array];
+    }
+    return _assetModelArray;
+}
+
+
+- (CHImageListBottomToolBar *)toolBar {
+    if (!_toolBar) {
+        CHImageListBottomToolBar *toolBar = [CHImageListBottomToolBar toolBar];
+        [self.view addSubview:toolBar];
+        _toolBar = toolBar;
+        __weak typeof(self) weakSelf = self;
+        toolBar.itemClickHandle = ^(CHImageListBottomToolBar *toolBar, CHImageListBottomToolBarItemType itemType) {
+            __strong typeof(self) strongSelf = weakSelf;
+            switch (itemType) {
+                case CHImageListBottomToolBarItemTypePreView: {
+                    [self gotoPreViewWithIndex:0];
+                }
+                    break;
+                    
+                case CHImageListBottomToolBarItemTypeFullImage: {
+                    
+                }
+                    break;
+                    
+                case CHImageListBottomToolBarItemTypeDone: {
+                    if ([strongSelf.delegate respondsToSelector:@selector(imageListViewControllerDidFinishSelect:)]) {
+                        [strongSelf.delegate imageListViewControllerDidFinishSelect:strongSelf];
+                    }
+                }
+                    break;
+                    
+                default:
+                    break;
+            }
+        };
+    }
+    return _toolBar;
+}
 @end

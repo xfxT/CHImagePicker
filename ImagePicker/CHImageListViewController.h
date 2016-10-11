@@ -6,8 +6,19 @@
 //  Copyright © 2016年 Charles. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+#import "CHImagePickerBaseViewController.h"
 
-@interface CHImageListViewController : UICollectionViewController
+@class CHAlbumModel, CHImageListViewController;
+@protocol CHImageListViewControllerDelegate <NSObject> 
+- (void)imageListViewControllerDidFinishSelect:(CHImageListViewController *)imageListViewController;
+@end
+
+@interface CHImageListViewController : CHImagePickerBaseViewController
+
+- (instancetype)initWithCurrentIndex:(NSInteger)currentIndex;
+
+@property (nonatomic, assign, readonly) NSInteger currentIndex;
+@property (nonatomic, weak) id <CHImageListViewControllerDelegate> delegate;
+@property (nonatomic, strong) CHAlbumModel *albumModel;
 
 @end

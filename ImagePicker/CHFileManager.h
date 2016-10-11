@@ -7,7 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <Foundation/Foundation.h>
 
 @interface CHFileManager : NSFileManager
+
+- (NSString *)tmpPath;
 
 @end

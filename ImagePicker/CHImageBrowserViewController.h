@@ -6,8 +6,17 @@
 //  Copyright © 2016年 Charles. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+#import "CHImagePickerBaseViewController.h"
 
-@interface CHImageBrowserViewController : UIViewController
+@class CHImageBrowserViewController;
+@class CHAssetModel;
+@protocol CHImageBrowserViewControllerDelegate <NSObject>
+- (void)imageBrowserViewController:(CHImageBrowserViewController *)imageBrowserViewController assetModelSelectTypeDidChange:(CHAssetModel *)assetModel index:(NSInteger)index;
+@end
 
+@interface CHImageBrowserViewController: CHImagePickerBaseViewController
+@property (nonatomic) NSInteger currentIndex;
+@property (nonatomic, strong) NSArray <CHAssetModel *>*assetModelArray;
+@property (nonatomic, strong) NSMutableArray *imageArray;
+@property (nonatomic, weak) id <CHImageBrowserViewControllerDelegate> delegate;
 @end

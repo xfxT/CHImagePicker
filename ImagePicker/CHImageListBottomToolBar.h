@@ -8,6 +8,17 @@
 
 #import <UIKit/UIKit.h>
 
-@interface CHImageListBottomToolBar : UIView
+typedef NS_ENUM(NSUInteger, CHImageListBottomToolBarItemType) {
+    CHImageListBottomToolBarItemTypePreView,
+    CHImageListBottomToolBarItemTypeFullImage,
+    CHImageListBottomToolBarItemTypeDone,
+};
+@class CHImageListBottomToolBar;
 
+typedef void(^CHImageListBottomToolBarItemClickHandle)(CHImageListBottomToolBar *toolBar, CHImageListBottomToolBarItemType itemType);
+@interface CHImageListBottomToolBar : UIView
++ (instancetype)toolBar;
+@property (nonatomic, assign) CGFloat dataLength;
+@property (nonatomic, assign) NSInteger count;
+@property (nonatomic, copy) CHImageListBottomToolBarItemClickHandle itemClickHandle;
 @end

@@ -8,6 +8,9 @@
 
 #import <UIKit/UIKit.h>
 
+@class CHAssetModel,CHImageListViewCell ;
+typedef void(^CHImageListViewCellSelectHandle)(CHImageListViewCell *cell, CHAssetModel *assetModel);
 @interface CHImageListViewCell : UICollectionViewCell
-
+@property (nonatomic, strong) CHAssetModel *assetModel;
+@property (nonatomic, copy) CHImageListViewCellSelectHandle selectHandle;
 @end

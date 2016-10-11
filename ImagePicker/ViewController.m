@@ -7,8 +7,10 @@
 //
 
 #import "ViewController.h"
+#import "CHImagePickerViewController.h"
+#import "CHActionSheet.h"
 
-@interface ViewController ()
+@interface ViewController () <CHImagePickerViewControllerDelegate>
 
 @end
 
@@ -16,12 +18,28 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view, typically from a nib.
+    
 }
 
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+- (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
+    
+    CHActionSheet *actionSheet = [CHActionSheet actionSheetWithCancelTitle:@"取消" alertTitle:@"选取图片或视频" SubTitles:@"拍照", @"从相册中获取图片", @"从相册中获取视频", nil];
+    [actionSheet setActionSheetItemClickHandle:^(CHActionSheet *actionSheet, NSInteger currentIndex, NSString *title) {
+        if (currentIndex == 0) {
+            // 拍照
+        } else if (currentIndex == 1) {
+            // 从相册中获取图片
+            CHImagePickerViewController *imagePickerViewController = [[CHImagePickerViewController alloc] init];
+            imagePickerViewController.imagePickerDelegate = self;
+            [self.navigationController presentViewController:imagePickerViewController animated:YES completion:nil];
+        } else {
+            // 从相册中获取视频
+        }
+    }];
+    [actionSheet show];
 }
 
+- (void)imagePickerViewController:(CHImagePickerViewController *)imagePickerViewController didFinishSelectWithImageArray:(NSArray<UIImage *> *)imageArray {
+    NSLog(@"didFinishSelectWithImageArray : %@", imageArray);
+}
 @end

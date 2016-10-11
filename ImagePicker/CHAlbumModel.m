@@ -10,4 +10,11 @@
 
 @implementation CHAlbumModel
 
+- (NSMutableArray *)selectedAssetModels {
+    if (!_selectedAssetModels) {
+        _selectedAssetModels = [NSMutableArray new];
+    }
+    return _selectedAssetModels;
+}
+ 
 @end

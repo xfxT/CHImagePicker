@@ -8,6 +8,10 @@
 
 #ifndef CHImagePickerConstant_h
 #define CHImagePickerConstant_h
-
+typedef NS_ENUM(NSUInteger, CHImagePickerViewControllerSourceType) {
+    CHImagePickerViewControllerSourceTypeImage,
+    CHImagePickerViewControllerSourceTypeVideo,
+    CHImagePickerViewControllerSourceTypeImageAndVideo,
+};
 
 #endif /* CHImagePickerConstant_h */
