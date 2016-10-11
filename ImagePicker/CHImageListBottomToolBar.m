@@ -13,6 +13,7 @@
 @property (nonatomic, weak) UIButton *fullImageBtn;
 @property (nonatomic, weak) UILabel *dataLengthL;
 @property (nonatomic, weak) UIButton *doneBtn;
+@property (nonatomic, weak) UILabel *doneLeftCountL;
 @end
 
 @implementation CHImageListBottomToolBar
@@ -23,12 +24,13 @@
 
 - (void)setDataLength:(CGFloat)dataLength {
     _dataLength = dataLength;
+    self.dataLengthL.hidden = dataLength == 0;
     self.dataLengthL.text = [NSString stringWithFormat:@"%.1f", dataLength];
 }
 
 - (void)setCount:(NSInteger)count {
     _count = count;
-    [self.doneBtn setTitle:[NSString stringWithFormat:@"%ld", count] forState:UIControlStateNormal];
+    [self.doneLeftCountL setText:[NSString stringWithFormat:@"%ld", count]];
 }
 
 - (UIButton *)preBtn {
@@ -96,6 +98,22 @@
     return _doneBtn;
 }
 
+- (UILabel *)doneLeftCountL {
+    if (!_doneLeftCountL) {
+        UILabel *doneLeftCount = [[UILabel alloc] init];
+        [self addSubview:doneLeftCount];
+        _doneLeftCountL = doneLeftCount;
+        doneLeftCount.textColor = [UIColor whiteColor];
+        doneLeftCount.font = [UIFont boldSystemFontOfSize:13];
+        doneLeftCount.textAlignment = NSTextAlignmentCenter;
+        doneLeftCount.backgroundColor = [UIColor greenColor];
+        doneLeftCount.layer.cornerRadius = 15.0;
+        doneLeftCount.layer.masksToBounds = YES;
+        doneLeftCount.layer.shouldRasterize = YES;
+    }
+    return _doneLeftCountL;
+}
+
 - (void)layoutSubviews {
     [super layoutSubviews];
     CGFloat preX = 10;
@@ -111,11 +129,24 @@
     self.fullImageBtn.frame = CGRectMake(fullX, fullY, fullW, fullH);
     self.fullImageBtn.center = CGPointMake(self.frame.size.width / 2.0, self.fullImageBtn.center.y);
     
-    CGFloat doneW = 70;
+    CGFloat dataLX = self.fullImageBtn.frame.origin.x + self.fullImageBtn.frame.size.width + 10;
+    CGFloat dataLY = preY;
+    CGFloat dataLW = 40;
+    CGFloat dataLH = preH;
+    self.dataLengthL.frame = CGRectMake(dataLX, dataLY, dataLW, dataLH);
+    
+    CGFloat doneW = 40;
     CGFloat doneX = self.frame.size.width - doneW - 20;
     CGFloat doneY = preY;
     CGFloat doneH = preH;
     self.doneBtn.frame = CGRectMake(doneX, doneY, doneW, doneH);
+    
+    CGFloat doneLeftCountLW = 30;
+    CGFloat doneLeftCountLX = self.doneBtn.frame.origin.x - doneLeftCountLW;
+    CGFloat doneLeftCountLY = preY;
+    CGFloat doneLeftCountLH = 30;
+    self.doneLeftCountL.frame = CGRectMake(doneLeftCountLX, doneLeftCountLY, doneLeftCountLW, doneLeftCountLH);
+    
 }
 
 @end

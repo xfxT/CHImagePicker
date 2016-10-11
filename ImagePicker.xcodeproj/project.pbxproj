@@ -27,6 +27,7 @@
 		568C95E41DACCBA700AAA72C /* CHFileManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 568C95E31DACCBA700AAA72C /* CHFileManager.m */; };
 		568C95E71DACD1C300AAA72C /* UIImage+CHAddition.m in Sources */ = {isa = PBXBuildFile; fileRef = 568C95E61DACD1C300AAA72C /* UIImage+CHAddition.m */; };
 		568C95EA1DACD65900AAA72C /* CHVideoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 568C95E91DACD65900AAA72C /* CHVideoViewController.m */; };
+		568C95ED1DACEB1E00AAA72C /* TZImagePickerController.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 568C95EC1DACEB1E00AAA72C /* TZImagePickerController.bundle */; };
 		56C0D9041DAB287A002C7D5C /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 56C0D9031DAB287A002C7D5C /* main.m */; };
 		56C0D9071DAB287A002C7D5C /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 56C0D9061DAB287A002C7D5C /* AppDelegate.m */; };
 		56C0D90A1DAB287A002C7D5C /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 56C0D9091DAB287A002C7D5C /* ViewController.m */; };
@@ -94,6 +95,7 @@
 		568C95E81DACD65900AAA72C /* CHVideoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CHVideoViewController.h; sourceTree = "<group>"; };
 		568C95E91DACD65900AAA72C /* CHVideoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CHVideoViewController.m; sourceTree = "<group>"; };
 		568C95EB1DACDB4C00AAA72C /* CHImagePickerConstant.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CHImagePickerConstant.h; sourceTree = "<group>"; };
+		568C95EC1DACEB1E00AAA72C /* TZImagePickerController.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = TZImagePickerController.bundle; sourceTree = "<group>"; };
 		56C0D8FF1DAB287A002C7D5C /* ImagePicker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ImagePicker.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		56C0D9031DAB287A002C7D5C /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		56C0D9051DAB287A002C7D5C /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -160,6 +162,7 @@
 		56C0D9011DAB287A002C7D5C /* ImagePicker */ = {
 			isa = PBXGroup;
 			children = (
+				568C95EC1DACEB1E00AAA72C /* TZImagePickerController.bundle */,
 				56C0D9051DAB287A002C7D5C /* AppDelegate.h */,
 				56C0D9061DAB287A002C7D5C /* AppDelegate.m */,
 				568C95EB1DACDB4C00AAA72C /* CHImagePickerConstant.h */,
@@ -345,6 +348,7 @@
 				56C0D9121DAB287A002C7D5C /* LaunchScreen.storyboard in Resources */,
 				568C95711DAB537F00AAA72C /* CHImageListViewCell.xib in Resources */,
 				56C0D90F1DAB287A002C7D5C /* Assets.xcassets in Resources */,
+				568C95ED1DACEB1E00AAA72C /* TZImagePickerController.bundle in Resources */,
 				56C0D90D1DAB287A002C7D5C /* Main.storyboard in Resources */,
 				568C95691DAB521000AAA72C /* CHAlbumListViewCell.xib in Resources */,
 			);

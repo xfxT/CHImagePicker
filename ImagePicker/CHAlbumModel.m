@@ -9,12 +9,10 @@
 #import "CHAlbumModel.h"
 
 @implementation CHAlbumModel
-
-- (NSMutableArray *)selectedAssetModels {
-    if (!_selectedAssetModels) {
-        _selectedAssetModels = [NSMutableArray new];
+- (NSMutableArray *)selectedAssetModelArray {
+    if (!_selectedAssetModelArray) {
+        _selectedAssetModelArray = [NSMutableArray new];
     }
-    return _selectedAssetModels;
+    return _selectedAssetModelArray;
 }
- 
 @end

@@ -15,9 +15,8 @@ typedef NS_ENUM(NSUInteger, CHAssetModelSelectType) {
 };
 @interface CHAssetModel : NSObject
 
-@property (nonatomic, strong) id asset;             ///< PHAsset or ALAsset
-@property (nonatomic, assign) CHAssetModelSelectType selectType;      ///< The select status of a photo, default is No
-//@property (nonatomic, assign) TZAssetModelMediaType type;
+@property (nonatomic, strong) id asset; 
+@property (nonatomic, assign) CHAssetModelSelectType selectType;
 @property (nonatomic, copy) NSString *timeLength;
 @property (nonatomic, assign) CHImagePickerViewControllerSourceType currentSourceType;
 @end

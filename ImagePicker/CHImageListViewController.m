@@ -13,6 +13,7 @@
 #import "CHImageListBottomToolBar.h"
 #import "CHImagePickerViewController.h"
 #import "CHAssetModel.h"
+#import "CHAlbumModel.h"
 
 @interface CHImageListViewController () <UICollectionViewDelegateFlowLayout, UICollectionViewDataSource, CHImageBrowserViewControllerDelegate>
 @property (nonatomic, weak) UICollectionView *collectionView;
@@ -52,6 +53,7 @@ static NSString *const cellID = @"cellID";
         NSMutableArray *selectAssetURLs = [NSMutableArray new];
         
         // 遍历已经选中的,看看是否是否存在
+        [self.albumModel.selectedAssetModelArray removeAllObjects];
         
         for (int i = 0; i < imagePickerViewController.assetModelArray.count; i++) {
             CHAssetModel *assetModel = imagePickerViewController.assetModelArray[i];
@@ -69,6 +71,7 @@ static NSString *const cellID = @"cellID";
             if ([asset isKindOfClass:[PHAsset class]]) {
                 if ([selectAssets containsObject:asset]) {
                     assetModel.selectType = CHAssetModelSelectTypeSelected;
+                    [self.albumModel.selectedAssetModelArray addObject:assetModel];
                 } else {
                     assetModel.selectType = CHAssetModelSelectTypeUnSelect;
                 }
@@ -76,6 +79,7 @@ static NSString *const cellID = @"cellID";
                 ALAsset *alAsset = (ALAsset *)assetModel.asset;
                 if ([selectAssetURLs containsObject:[alAsset valueForProperty:ALAssetPropertyURLs]]) {
                     assetModel.selectType = CHAssetModelSelectTypeSelected;
+                    [self.albumModel.selectedAssetModelArray addObject:assetModel];
                 } else {
                     assetModel.selectType = CHAssetModelSelectTypeUnSelect;
                 }
@@ -84,6 +88,9 @@ static NSString *const cellID = @"cellID";
         
         [self.collectionView reloadData];
     }];
+    
+    self.toolBar.count = self.albumModel.selectedAssetModelsCount;
+    
 }
 
 - (void)viewDidLayoutSubviews {
@@ -115,7 +122,6 @@ static NSString *const cellID = @"cellID";
     if (imagePickerViewController.assetModelArray.count == 0) {
         [imagePickerViewController.assetModelArray addObject:assetM];
     } else {
-        
         for (int i = 0; i < selectAssetModelArray.count; i++) {
             CHAssetModel *assetModel = selectAssetModelArray[i];
             id asset = assetModel.asset;
@@ -174,6 +180,20 @@ static NSString *const cellID = @"cellID";
     cell.selectHandle = ^(CHImageListViewCell *cell, CHAssetModel *assetModel) {
         __strong typeof(self) strongSelf = weakSelf;
         [strongSelf callBackHandleWithAssetModel:assetModel];
+        if (assetModel.selectType == CHAssetModelSelectTypeUnSelect) {
+            if ([strongSelf.albumModel.selectedAssetModelArray containsObject:assetModel]) {
+                [strongSelf.albumModel.selectedAssetModelArray removeObject:assetModel];
+            }
+        } else if (assetModel.selectType == CHAssetModelSelectTypeSelected) {
+            if (![strongSelf.albumModel.selectedAssetModelArray containsObject:assetModel]) {
+                [strongSelf.albumModel.selectedAssetModelArray addObject:assetModel];
+            }
+        }
+        strongSelf.albumModel.selectedAssetModelsCount += assetModel.selectType == CHAssetModelSelectTypeUnSelect ? (-1) : 1;
+        strongSelf.toolBar.count = strongSelf.albumModel.selectedAssetModelsCount;
+        [[CHImageManager defaultManager] imagesDataLengthWithAssetModels:strongSelf.albumModel.selectedAssetModelArray completionHandle:^(CHImageManager *defaultManager, CGFloat dataLength) {
+            strongSelf.toolBar.dataLength = dataLength;
+        }];
     };
     
     // 3. 返回cell
@@ -219,7 +239,6 @@ static NSString *const cellID = @"cellID";
     return _assetModelArray;
 }
 
-
 - (CHImageListBottomToolBar *)toolBar {
     if (!_toolBar) {
         CHImageListBottomToolBar *toolBar = [CHImageListBottomToolBar toolBar];
@@ -235,7 +254,9 @@ static NSString *const cellID = @"cellID";
                     break;
                     
                 case CHImageListBottomToolBarItemTypeFullImage: {
-                    
+                    [[CHImageManager defaultManager] imagesDataLengthWithAssetModels:strongSelf.albumModel.selectedAssetModelArray completionHandle:^(CHImageManager *defaultManager, CGFloat dataLength) {
+                        strongSelf.toolBar.dataLength = dataLength;
+                    }];
                 }
                     break;
                     

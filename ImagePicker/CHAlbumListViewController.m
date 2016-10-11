@@ -62,13 +62,13 @@ static NSString * const reuseIdentifier = @"Cell";
                         id asset = assetModel.asset;
                         if ([asset isKindOfClass:[PHAsset class]]) {
                             if ([selectedAssets containsObject:asset]) {
-                                albumModel.selectedCount += 1;
+                                albumModel.selectedAssetModelsCount += 1;
                             }
                         } else if ([asset isKindOfClass:[ALAsset class]]) {
                             ALAsset *alAsset = (ALAsset *)asset;
                             id value = [alAsset valueForProperty:ALAssetPropertyURLs];
                             if ([selectedAssetURLs containsObject:value]) {
-                                albumModel.selectedCount += 1;
+                                albumModel.selectedAssetModelsCount += 1;
                             }
                         }
                     }

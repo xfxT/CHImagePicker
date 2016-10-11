@@ -82,9 +82,9 @@ static const char CHImageManagerSaveImageCompletionHandleKey;
                     PHFetchResult *result = [PHAsset fetchAssetsInAssetCollection:assetCollection options:fetchOptions];
                     
                     CHAlbumModel *albumModel = [[CHAlbumModel alloc] init];
-                    albumModel.result = result;
-                    albumModel.name = assetCollection.localizedTitle;
-                    albumModel.count = result.count;
+                    albumModel.fetchResult = result;
+                    albumModel.albumName = assetCollection.localizedTitle;
+                    albumModel.totalAssetModelsCount = result.count;
                     if (captureHandle) {
                         captureHandle(self, albumModel);
                     }
@@ -99,9 +99,9 @@ static const char CHImageManagerSaveImageCompletionHandleKey;
                     NSString *groupPropertyName = [group valueForProperty:ALAssetsGroupPropertyName];
                     if ([self isCameraRollAlbumWithLocalizedTitle:groupPropertyName]) {
                         CHAlbumModel *albumModel = [[CHAlbumModel alloc] init];
-                        albumModel.result = group;
-                        albumModel.count = group.numberOfAssets;
-                        albumModel.name = groupPropertyName;
+                        albumModel.fetchResult = group;
+                        albumModel.totalAssetModelsCount = group.numberOfAssets;
+                        albumModel.albumName = groupPropertyName;
                         if (captureHandle) {
                             captureHandle(self, albumModel);
                         }
@@ -171,9 +171,9 @@ static const char CHImageManagerSaveImageCompletionHandleKey;
                     if (![assetCollection.localizedTitle isEqualToString:@"Deleted"] && ![assetCollection.localizedTitle isEqualToString:@"最近删除"]) {
                         // Camera Roll 在最前面
                         CHAlbumModel *albumModel = [[CHAlbumModel alloc] init];
-                        albumModel.name = assetCollection.localizedTitle;
-                        albumModel.count = fetchResult.count;
-                        albumModel.result = fetchResult;
+                        albumModel.albumName = assetCollection.localizedTitle;
+                        albumModel.totalAssetModelsCount = fetchResult.count;
+                        albumModel.fetchResult = fetchResult;
                         
                         if ([self isCameraRollAlbumWithLocalizedTitle:assetCollection.localizedTitle]) {
                             [albumsArray insertObject:albumModel atIndex:0];
@@ -191,9 +191,9 @@ static const char CHImageManagerSaveImageCompletionHandleKey;
                 PHFetchResult *fetchResult = [PHAsset fetchAssetsInAssetCollection:assetCollection options:fetchOptions];
                 if (fetchResult.count > 0) {
                     CHAlbumModel *albumModel = [[CHAlbumModel alloc] init];
-                    albumModel.result = fetchResult;
-                    albumModel.count = fetchResult.count;
-                    albumModel.name = assetCollection.localizedTitle;
+                    albumModel.fetchResult = fetchResult;
+                    albumModel.totalAssetModelsCount = fetchResult.count;
+                    albumModel.albumName = assetCollection.localizedTitle;
                     [albumsArray addObject:albumModel];
                 }
             }
@@ -208,14 +208,14 @@ static const char CHImageManagerSaveImageCompletionHandleKey;
             if (group) {
                 if (group.numberOfAssets > 0) {
                     CHAlbumModel *albumModel = [[CHAlbumModel alloc] init];
-                    albumModel.result = group;
-                    albumModel.count = group.numberOfAssets;
+                    albumModel.fetchResult = group;
+                    albumModel.totalAssetModelsCount = group.numberOfAssets;
                     NSString *groupPropertyName = [group valueForProperty:ALAssetsGroupPropertyName];
-                    albumModel.name = groupPropertyName;
+                    albumModel.albumName = groupPropertyName;
                     if ([self isCameraRollAlbumWithLocalizedTitle:groupPropertyName]) {
                         [albumsArray insertObject:albumModel atIndex:0];
                     } else if ([groupPropertyName isEqualToString:@"My Photo Stream"] || [groupPropertyName isEqualToString:@"我的照片流"]) {
-                        if (albumModel.count > 0) {
+                        if (albumModel.totalAssetModelsCount > 0) {
                             [albumsArray insertObject:albumModel atIndex:1];
                         } else {
                             [albumsArray addObject:albumModel];
@@ -242,7 +242,7 @@ static const char CHImageManagerSaveImageCompletionHandleKey;
     if (albumModel == nil || captureHandle == nil) {
         return ;
     }
-    id result = albumModel.result;
+    id result = albumModel.fetchResult;
     NSMutableArray *assetModelArray = [NSMutableArray new];
     if ([result isKindOfClass:[PHFetchResult class]]) {
         PHFetchResult *fetchResult = (PHFetchResult *)result;
@@ -372,14 +372,14 @@ static const char CHImageManagerSaveImageCompletionHandleKey;
     }
     
     if ([UIDevice currentDevice].systemVersion.floatValue >= 8.0) {
-        if (![albumModel.result count]) {
+        if (![albumModel.fetchResult count]) {
             if (captureHandle) {
                 captureHandle(self, nil);
             }
             return ;
         }
         
-        id asset = [albumModel.result lastObject];
+        id asset = [albumModel.fetchResult lastObject];
         CHAssetModel *assetModel = [[CHAssetModel alloc] init];
         assetModel.asset = asset;
         [self imageWithAssetModel:assetModel targetSize:targetSize captureHandle:^(CHImageManager *defaultManager, UIImage *image, NSDictionary *imageInfo) {
@@ -388,7 +388,7 @@ static const char CHImageManagerSaveImageCompletionHandleKey;
             }
         }];
     } else {
-        ALAssetsGroup *assetGroup = albumModel.result;
+        ALAssetsGroup *assetGroup = albumModel.fetchResult;
         CGImageRef imageRef = assetGroup.posterImage;
         UIImage *coverImage = [UIImage imageWithCGImage:imageRef];
         if (captureHandle) {

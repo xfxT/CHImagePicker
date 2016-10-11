@@ -31,15 +31,15 @@
     _albumModel = albumModel;
     
     self.coverImgView.image = nil;
-    self.nameL.text = albumModel.name;
-    if (albumModel.selectedCount == 0) {
+    self.nameL.text = albumModel.albumName;
+    if (albumModel.selectedAssetModelsCount == 0) {
         self.selectCountL.backgroundColor = [UIColor clearColor];
     } else {
         self.selectCountL.backgroundColor = [UIColor orangeColor];
     }
-    self.selectCountL.text = albumModel.selectedCount > 0 ? [NSString stringWithFormat:@"%ld", albumModel.selectedCount] : @"";
+    self.selectCountL.text = albumModel.selectedAssetModelsCount > 0 ? [NSString stringWithFormat:@"%ld", albumModel.selectedAssetModelsCount] : @"";
     
-    self.countL.text = [NSString stringWithFormat:@"%ld", albumModel.count];
+    self.countL.text = [NSString stringWithFormat:@"%ld", albumModel.totalAssetModelsCount];
     
     [[CHImageManager defaultManager] albumCoverImageWithAlbumModel:albumModel targetSize:self.coverImgView.frame.size captureHandle:^(CHImageManager *defaultManager, UIImage *image) {
         self.coverImgView.image = image;
