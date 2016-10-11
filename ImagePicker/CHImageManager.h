@@ -21,9 +21,11 @@ typedef void(^CHImageManagerSingleImageInfoCaptureHandle)(CHImageManager *defaul
 typedef void(^CHImageManagerAlbumCoverImageCaptureHandle)(CHImageManager *defaultManager, UIImage *image);
 typedef void(^CHImageManagerSaveImageCompletionHandle)(CHImageManager *defaultManager, NSError *error);
 typedef void(^CHImageManagerCaptureDataLengthCompletionHandle)(CHImageManager *defaultManager, CGFloat dataLength);
+
 @interface CHImageManager : NSObject
 
-@property (nonatomic, assign, readonly) BOOL authorizationStatusAuthorized;
+@property (nonatomic, readonly) BOOL authorizationStatusAuthorized;
+@property (nonatomic) NSInteger maximumCount; 
 @property (nonatomic) CHImagePickerViewControllerSourceType sourceType;
 
 + (instancetype)defaultManager;

@@ -42,4 +42,8 @@
 - (void)imagePickerViewController:(CHImagePickerViewController *)imagePickerViewController didFinishSelectWithImageArray:(NSArray<UIImage *> *)imageArray {
     NSLog(@"didFinishSelectWithImageArray : %@", imageArray);
 }
+
+- (void)imagePickerViewControllerDidCancel:(CHImagePickerViewController *)imagePickerViewController {
+    
+}
 @end

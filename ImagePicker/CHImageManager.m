@@ -117,6 +117,11 @@ static const char CHImageManagerSaveImageCompletionHandleKey;
 
 - (void)imagesDataLengthWithAssetModels:(NSArray<CHAssetModel *> *)assetModels completionHandle:(CHImageManagerCaptureDataLengthCompletionHandle)completionHandle {
     __block CGFloat dataLength = 0;
+    if (assetModels.count == 0) {
+        if (completionHandle) {
+            completionHandle(self, 0.0);
+        }
+    }
     for (int i = 0; i < assetModels.count; i++) {
         CHAssetModel *model = assetModels[i];
         if ([model.asset isKindOfClass:[PHAsset class]]) {

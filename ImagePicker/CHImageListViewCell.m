@@ -29,12 +29,8 @@
 
 - (IBAction)actionBtnClick:(UIButton *)sender {
     
-    sender.selected = !sender.selected;
-    
-    self.assetModel.selectType = sender.selected;
-    
     if (self.selectHandle) {
-        self.selectHandle(self, self.assetModel);
+        self.selectHandle(self, self.assetModel, sender);
     }
 }
 @end

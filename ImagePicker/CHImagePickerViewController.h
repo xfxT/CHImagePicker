@@ -9,17 +9,25 @@
 #import <UIKit/UIKit.h>
 #import "CHImagePickerConstant.h"
 
-@class CHImagePickerViewController;
-
-
+@class CHImagePickerViewController, CHAssetModel;
 @protocol CHImagePickerViewControllerDelegate <NSObject>
 - (void)imagePickerViewController:(CHImagePickerViewController *)imagePickerViewController didFinishSelectWithImageArray:(NSArray <UIImage *>*)imageArray;
 - (void)imagePickerViewControllerDidCancel:(CHImagePickerViewController *)imagePickerViewController;
 @end
 
 @interface CHImagePickerViewController : UINavigationController
-@property (nonatomic, weak) id <CHImagePickerViewControllerDelegate> imagePickerDelegate;
-@property (nonatomic, strong) NSMutableArray *assetModelArray;
 
+// default is 1
+@property (nonatomic, assign) NSInteger minimumCount;
+
+// default is CHImagePickerViewControllerSourceTypeImage
 @property (nonatomic) CHImagePickerViewControllerSourceType sourceType;
+
+@property (nonatomic, weak) id <CHImagePickerViewControllerDelegate> imagePickerDelegate;
+
+@property (nonatomic, strong) NSMutableArray <CHAssetModel *>*assetModelArray;
+
+// the result or get the result from the imagePickerDelegate
+@property (nonatomic, strong, readonly) NSArray <UIImage *>*imageArray;
+
 @end

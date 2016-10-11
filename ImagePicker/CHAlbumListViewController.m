@@ -140,6 +140,14 @@ static NSString * const reuseIdentifier = @"Cell";
 }
 
 - (void)imageListViewControllerDidFinishSelect:(CHImageListViewController *)imageListViewController {
-     
+    CHImagePickerViewController *imagePickerViewController = (CHImagePickerViewController *)imageListViewController.navigationController;
+    
+    NSArray *array = imagePickerViewController.imageArray;
+    if ([imagePickerViewController.imagePickerDelegate respondsToSelector:@selector(imagePickerViewController:didFinishSelectWithImageArray:)]) {
+        [imagePickerViewController.imagePickerDelegate imagePickerViewController:imagePickerViewController didFinishSelectWithImageArray:array];
+    }
+    
+    [imagePickerViewController dismissViewControllerAnimated:YES completion:nil];
+    
 }
 @end

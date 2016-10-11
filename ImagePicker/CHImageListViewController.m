@@ -90,6 +90,9 @@ static NSString *const cellID = @"cellID";
     }];
     
     self.toolBar.count = self.albumModel.selectedAssetModelsCount;
+    [[CHImageManager defaultManager] imagesDataLengthWithAssetModels:self.albumModel.selectedAssetModelArray completionHandle:^(CHImageManager *defaultManager, CGFloat dataLength) {
+        self.toolBar.dataLength = dataLength;
+    }];
     
 }
 
@@ -177,8 +180,26 @@ static NSString *const cellID = @"cellID";
     cell.assetModel = self.assetModelArray[indexPath.item];
     
     __weak typeof(self) weakSelf = self;
-    cell.selectHandle = ^(CHImageListViewCell *cell, CHAssetModel *assetModel) {
+    cell.selectHandle = ^(CHImageListViewCell *cell, CHAssetModel *assetModel, UIButton *actionBtn) {
+        
+        NSInteger maxCount = [CHImageManager defaultManager].maximumCount;
+        
         __strong typeof(self) strongSelf = weakSelf;
+        CHImagePickerViewController *imagePickerViewController = (CHImagePickerViewController *)strongSelf.navigationController;
+        if (imagePickerViewController.assetModelArray.count == maxCount && assetModel.selectType == CHAssetModelSelectTypeUnSelect) {
+            NSString *message = [NSString stringWithFormat:@"已经超出了最大可选数量限制:%ld", maxCount];
+            UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"提示" message:message preferredStyle:UIAlertControllerStyleAlert];
+            UIAlertAction *alertAction = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                [alertController dismissViewControllerAnimated:YES completion:nil];
+            }];
+            [alertController addAction:alertAction];
+            [strongSelf presentViewController:alertController animated:YES completion:nil];
+            return ;
+        }
+        
+        actionBtn.selected = !actionBtn.selected;
+        assetModel.selectType = actionBtn.selected;
+        
         [strongSelf callBackHandleWithAssetModel:assetModel];
         if (assetModel.selectType == CHAssetModelSelectTypeUnSelect) {
             if ([strongSelf.albumModel.selectedAssetModelArray containsObject:assetModel]) {
@@ -216,11 +237,11 @@ static NSString *const cellID = @"cellID";
 - (UICollectionView *)collectionView {
     if (!_collectionView) {
         UICollectionViewFlowLayout *layout = [UICollectionViewFlowLayout new];
-        CGFloat itemWH = self.view.frame.size.width / 3.0;
+        layout.minimumLineSpacing = 5.0;
+        layout.minimumInteritemSpacing = 5.0;
+        layout.sectionInset = UIEdgeInsetsMake(10, 10, 10, 10);
+        CGFloat itemWH = (self.view.frame.size.width - layout.sectionInset.left - layout.sectionInset.right - layout.minimumInteritemSpacing * 4) / 3.0;
         layout.itemSize = CGSizeMake(itemWH, itemWH);
-        layout.minimumLineSpacing = 0.0;
-        layout.minimumInteritemSpacing = 0.0;
-        layout.sectionInset = UIEdgeInsetsZero;
         
         UICollectionView *collectionView = [[UICollectionView alloc] initWithFrame:self.view.bounds collectionViewLayout:layout];
         [self.view addSubview:collectionView];
