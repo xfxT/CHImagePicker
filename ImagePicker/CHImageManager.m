@@ -355,6 +355,10 @@ static const char CHImageManagerSaveImageCompletionHandleKey;
     }
 }
 
+- (void)originalImageWithAssetModel:(CHAssetModel *)assetModel captureHandle:(CHImageManagerSingleImageInfoCaptureHandle)captureHandle {
+    return [self imageWithAssetModel:assetModel targetSize:[UIScreen mainScreen].bounds.size captureHandle:captureHandle];
+}
+
 - (void)saveImage:(UIImage *)image completionHandle:(CHImageManagerSaveImageCompletionHandle)completionHandle {
     if (image == nil) {
         return ;

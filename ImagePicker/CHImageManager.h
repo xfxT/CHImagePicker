@@ -25,7 +25,7 @@ typedef void(^CHImageManagerCaptureDataLengthCompletionHandle)(CHImageManager *d
 @interface CHImageManager : NSObject
 
 @property (nonatomic, readonly) BOOL authorizationStatusAuthorized;
-@property (nonatomic) NSInteger maximumCount; 
+@property (nonatomic) NSInteger maximumCount;
 @property (nonatomic) CHImagePickerViewControllerSourceType sourceType;
 
 + (instancetype)defaultManager;
@@ -37,6 +37,8 @@ typedef void(^CHImageManagerCaptureDataLengthCompletionHandle)(CHImageManager *d
 - (void)allAssetModelsWithAlbumModel:(CHAlbumModel *)albumModel captureHandle:(CHImageManagerAllAssetModelsCaptureHandle)captureHandle;
 
 - (void)imageWithAssetModel:(CHAssetModel *)assetModel targetSize:(CGSize)targetSize captureHandle:(CHImageManagerSingleImageInfoCaptureHandle)captureHandle;
+
+- (void)originalImageWithAssetModel:(CHAssetModel *)assetModel captureHandle:(CHImageManagerSingleImageInfoCaptureHandle)captureHandle;
 
 - (void)imagesDataLengthWithAssetModels:(NSArray <CHAssetModel *>*)assetModels completionHandle:(CHImageManagerCaptureDataLengthCompletionHandle)completionHandle;
 

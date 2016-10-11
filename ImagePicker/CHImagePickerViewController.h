@@ -18,7 +18,7 @@
 @interface CHImagePickerViewController : UINavigationController
 
 // default is 1
-@property (nonatomic, assign) NSInteger minimumCount;
+@property (nonatomic, assign) NSInteger maximumCount;
 
 // default is CHImagePickerViewControllerSourceTypeImage
 @property (nonatomic) CHImagePickerViewControllerSourceType sourceType;

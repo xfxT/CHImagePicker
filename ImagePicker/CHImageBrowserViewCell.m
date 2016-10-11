@@ -20,7 +20,7 @@
 - (void)setAssetModel:(CHAssetModel *)assetModel {
     _assetModel = assetModel;
     
-    [[CHImageManager defaultManager] imageWithAssetModel:assetModel targetSize:self.imgView.frame.size captureHandle:^(CHImageManager *defaultManager, UIImage *image, NSDictionary *imageInfo) {
+    [[CHImageManager defaultManager] originalImageWithAssetModel:assetModel captureHandle:^(CHImageManager *defaultManager, UIImage *image, NSDictionary *imageInfo) {
         self.imgView.image = image;
     }];
     
