@@ -93,27 +93,7 @@
     self.scrollView.zoomScale = 1.0;
     
     // 3. 重新布局
-    [self setNeedsDisplay];
-}
-
-- (void)actionBtnClick:(UIButton *)btn {
-    
-    btn.selected = !btn.selected;
-    self.assetModel.selectType = btn.selected;
-    
-    if (self.selectHandle) {
-        self.selectHandle(self, self.assetModel);
-    }
-}
-
-- (UIView *)viewForZoomingInScrollView:(UIScrollView *)scrollView {
-    return self.bgView;
-}
-
-- (void)scrollViewDidZoom:(UIScrollView *)scrollView {
-    CGFloat offsetX = (scrollView.frame.size.width > scrollView.contentSize.width) ? (scrollView.frame.size.width - scrollView.contentSize.width) * 0.5 : 0.0;
-    CGFloat offsetY = (scrollView.frame.size.height > scrollView.contentSize.height) ? (scrollView.frame.size.height - scrollView.contentSize.height) * 0.5 : 0.0;
-    self.bgView.center = CGPointMake(scrollView.contentSize.width * 0.5 + offsetX, scrollView.contentSize.height * 0.5 + offsetY);
+    [self setNeedsLayout];
 }
 
 - (void)layoutSubviews {
@@ -160,6 +140,26 @@
     CGFloat actionY = 20;
     self.actionBtn.frame = CGRectMake(actionX, actionY, actionW, actionH);
     [self.contentView bringSubviewToFront:self.actionBtn];
+}
+
+- (void)actionBtnClick:(UIButton *)btn {
+    
+    btn.selected = !btn.selected;
+    self.assetModel.selectType = btn.selected;
+    
+    if (self.selectHandle) {
+        self.selectHandle(self, self.assetModel);
+    }
+}
+
+- (UIView *)viewForZoomingInScrollView:(UIScrollView *)scrollView {
+    return self.bgView;
+}
+
+- (void)scrollViewDidZoom:(UIScrollView *)scrollView {
+    CGFloat offsetX = (scrollView.frame.size.width > scrollView.contentSize.width) ? (scrollView.frame.size.width - scrollView.contentSize.width) * 0.5 : 0.0;
+    CGFloat offsetY = (scrollView.frame.size.height > scrollView.contentSize.height) ? (scrollView.frame.size.height - scrollView.contentSize.height) * 0.5 : 0.0;
+    self.bgView.center = CGPointMake(scrollView.contentSize.width * 0.5 + offsetX, scrollView.contentSize.height * 0.5 + offsetY);
 }
 
 - (UIButton *)actionBtn {

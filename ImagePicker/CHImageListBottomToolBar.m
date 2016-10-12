@@ -24,6 +24,7 @@
 @end
 
 @implementation CHImageListBottomToolBar
+
 /**
  *  构造方法
  *
@@ -95,7 +96,7 @@
         [send setTitleColor:[UIColor greenColor] forState:UIControlStateNormal];
         send.titleLabel.font = [UIFont systemFontOfSize:13];
         [send addTarget:self action:@selector(btnClick:) forControlEvents:UIControlEventTouchUpInside];
-        send.tag = 3;
+        send.tag = 2;
     }
     return _sendBtn;
 }

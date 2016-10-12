@@ -227,6 +227,10 @@ static NSString *const cellID = @"cellID";
 - (void)imageBrowserViewController:(CHImageBrowserViewController *)imageBrowserViewController assetModelSelectTypeDidChange:(CHAsset *)assetModel index:(NSInteger)index {
     CHAsset *currentAssetModel = self.assetModelArray[index];
     currentAssetModel.selectType = assetModel.selectType;
+    
+    self.albumModel.selectedAssetModelsCount += currentAssetModel.selectType == CHAssetSelectTypeUnSelect ? (-1) : 1;
+    self.toolBar.count = self.albumModel.selectedAssetModelsCount;
+    
     [self.collectionView reloadItemsAtIndexPaths:@[[NSIndexPath indexPathForItem:index inSection:0]]];
     [self handleAssetModel:assetModel];
 }

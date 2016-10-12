@@ -15,7 +15,6 @@
 @implementation CHImagePickerViewController
 
 - (NSArray *)imageArray {
-   
     NSMutableArray *mutableArray = [NSMutableArray new];
     for (CHAsset *assetModel in self.assetModelArray) {
         [[CHAlbumManager defaultManager] imageWithAssetModel:assetModel imageWidth:[UIScreen mainScreen].bounds.size.width captureHandle:^(CHAlbumManager *defaultManager, CHImage *image) {
