@@ -8,24 +8,29 @@
 
 #import "CHImageListViewController.h"
 #import "CHImageListViewCell.h"
-#import "CHImageManager.h"
+#import "CHAlbumManager.h"
 #import "CHImageBrowserViewController.h"
 #import "CHImageListBottomToolBar.h"
 #import "CHImagePickerViewController.h"
-#import "CHAssetModel.h"
-#import "CHAlbumModel.h"
+#import "CHAsset.h"
+#import "CHAlbum.h"
 
 @interface CHImageListViewController () <UICollectionViewDelegateFlowLayout, UICollectionViewDataSource, CHImageBrowserViewControllerDelegate>
 @property (nonatomic, weak) UICollectionView *collectionView;
 @property (nonatomic, strong) NSArray *assetModelArray;
 @property (nonatomic, assign) NSInteger currentIndex;
 @property (nonatomic, weak) CHImageListBottomToolBar *toolBar;
-
 @end
 
 static NSString *const cellID = @"cellID";
 @implementation CHImageListViewController
-
+/**
+ *  构造方法
+ *
+ *  @param currentIndex 相册所在的索引
+ *
+ *  @return 相片列表控制器实例对象
+ */
 - (instancetype)initWithCurrentIndex:(NSInteger)currentIndex {
     if (self = [super init]) {
         _currentIndex = currentIndex;
@@ -40,7 +45,7 @@ static NSString *const cellID = @"cellID";
     [self.collectionView registerNib:cellNib forCellWithReuseIdentifier:cellID];
     
     // 获取本相册所有的相片 然后展示
-    [[CHImageManager defaultManager] allAssetModelsWithAlbumModel:self.albumModel captureHandle:^(CHImageManager *defaultManager, NSArray<CHAssetModel *> *assetModelArray) {
+    [[CHAlbumManager defaultManager] allAssetModelsWithAlbumModel:self.albumModel captureHandle:^(CHAlbumManager *defaultManager, NSArray<CHAsset *> *assetModelArray) {
         
         // 当前界面的所有图片数据模型
         self.assetModelArray = assetModelArray;
@@ -56,7 +61,7 @@ static NSString *const cellID = @"cellID";
         [self.albumModel.selectedAssetModelArray removeAllObjects];
         
         for (int i = 0; i < imagePickerViewController.assetModelArray.count; i++) {
-            CHAssetModel *assetModel = imagePickerViewController.assetModelArray[i];
+            CHAsset *assetModel = imagePickerViewController.assetModelArray[i];
             id asset = assetModel.asset;
             if ([asset isKindOfClass:[PHAsset class]]) {
                 [selectAssets addObject:asset];
@@ -66,22 +71,22 @@ static NSString *const cellID = @"cellID";
             }
         }
         
-        for (CHAssetModel *assetModel in assetModelArray) {
+        for (CHAsset *assetModel in assetModelArray) {
             id asset = assetModel.asset;
             if ([asset isKindOfClass:[PHAsset class]]) {
                 if ([selectAssets containsObject:asset]) {
-                    assetModel.selectType = CHAssetModelSelectTypeSelected;
+                    assetModel.selectType = CHAssetSelectTypeSelected;
                     [self.albumModel.selectedAssetModelArray addObject:assetModel];
                 } else {
-                    assetModel.selectType = CHAssetModelSelectTypeUnSelect;
+                    assetModel.selectType = CHAssetSelectTypeUnSelect;
                 }
             } else if ([asset isKindOfClass:[ALAsset class]]) {
                 ALAsset *alAsset = (ALAsset *)assetModel.asset;
                 if ([selectAssetURLs containsObject:[alAsset valueForProperty:ALAssetPropertyURLs]]) {
-                    assetModel.selectType = CHAssetModelSelectTypeSelected;
+                    assetModel.selectType = CHAssetSelectTypeSelected;
                     [self.albumModel.selectedAssetModelArray addObject:assetModel];
                 } else {
-                    assetModel.selectType = CHAssetModelSelectTypeUnSelect;
+                    assetModel.selectType = CHAssetSelectTypeUnSelect;
                 }
             }
         }
@@ -90,10 +95,6 @@ static NSString *const cellID = @"cellID";
     }];
     
     self.toolBar.count = self.albumModel.selectedAssetModelsCount;
-    [[CHImageManager defaultManager] imagesDataLengthWithAssetModels:self.albumModel.selectedAssetModelArray completionHandle:^(CHImageManager *defaultManager, CGFloat dataLength) {
-        self.toolBar.dataLength = dataLength;
-    }];
-    
 }
 
 - (void)viewDidLayoutSubviews {
@@ -110,11 +111,11 @@ static NSString *const cellID = @"cellID";
     [self.navigationController pushViewController:browserViewController animated:YES];
 }
 
-- (void)callBackHandleWithAssetModel:(CHAssetModel *)assetM {
+- (void)callBackHandleWithAssetModel:(CHAsset *)assetM {
     [self handleAssetModel:assetM];
 }
 
-- (void)handleAssetModel:(CHAssetModel *)assetM {
+- (void)handleAssetModel:(CHAsset *)assetM {
     CHImagePickerViewController *imagePickerViewController = (CHImagePickerViewController *)self.navigationController;
     
     // 处理选中图片
@@ -126,16 +127,16 @@ static NSString *const cellID = @"cellID";
         [imagePickerViewController.assetModelArray addObject:assetM];
     } else {
         for (int i = 0; i < selectAssetModelArray.count; i++) {
-            CHAssetModel *assetModel = selectAssetModelArray[i];
+            CHAsset *assetModel = selectAssetModelArray[i];
             id asset = assetModel.asset;
             if ([asset isKindOfClass:[PHAsset class]]) {
                 [selectAssets addObject:asset];
-                if ([selectAssets containsObject:assetM.asset] && assetM.selectType == CHAssetModelSelectTypeUnSelect) {
+                if ([selectAssets containsObject:assetM.asset] && assetM.selectType == CHAssetSelectTypeUnSelect) {
                     [imagePickerViewController.assetModelArray removeObject:assetModel];
                     [selectAssetModelArray removeObject:assetModel];
                     [selectAssets removeObject:asset];
                 } else {
-                    if (assetM.selectType == CHAssetModelSelectTypeSelected) {
+                    if (assetM.selectType == CHAssetSelectTypeSelected) {
                         if (![imagePickerViewController.assetModelArray containsObject:assetM]) {
                             [imagePickerViewController.assetModelArray addObject:assetM];
                         }
@@ -144,12 +145,12 @@ static NSString *const cellID = @"cellID";
             } else if ([asset isKindOfClass:[ALAsset class]]) {
                 ALAsset *alAsset = (ALAsset *)asset;
                 [selectAssetURLs addObject:[alAsset valueForProperty:ALAssetPropertyURLs]];
-                if ([selectAssetURLs containsObject:[alAsset valueForProperty:ALAssetPropertyURLs]] && assetM.selectType == CHAssetModelSelectTypeUnSelect) {
+                if ([selectAssetURLs containsObject:[alAsset valueForProperty:ALAssetPropertyURLs]] && assetM.selectType == CHAssetSelectTypeUnSelect) {
                     [imagePickerViewController.assetModelArray removeObject:assetModel];
                     [selectAssetModelArray removeObject:assetModel];
                     [selectAssetURLs removeObject:[alAsset valueForProperty:ALAssetPropertyURLs]];
                 } else {
-                    if (assetM.selectType == CHAssetModelSelectTypeSelected) {
+                    if (assetM.selectType == CHAssetSelectTypeSelected) {
                         if (![imagePickerViewController.assetModelArray containsObject:assetM]) {
                             [imagePickerViewController.assetModelArray addObject:assetM];
                         }
@@ -180,13 +181,13 @@ static NSString *const cellID = @"cellID";
     cell.assetModel = self.assetModelArray[indexPath.item];
     
     __weak typeof(self) weakSelf = self;
-    cell.selectHandle = ^(CHImageListViewCell *cell, CHAssetModel *assetModel, UIButton *actionBtn) {
+    cell.selectHandle = ^(CHImageListViewCell *cell, CHAsset *assetModel, UIButton *actionBtn) {
         
-        NSInteger maxCount = [CHImageManager defaultManager].maximumCount;
+        NSInteger maxCount = [CHAlbumManager defaultManager].maximumCount;
         
         __strong typeof(self) strongSelf = weakSelf;
         CHImagePickerViewController *imagePickerViewController = (CHImagePickerViewController *)strongSelf.navigationController;
-        if (imagePickerViewController.assetModelArray.count == maxCount && assetModel.selectType == CHAssetModelSelectTypeUnSelect) {
+        if (imagePickerViewController.assetModelArray.count == maxCount && assetModel.selectType == CHAssetSelectTypeUnSelect) {
             NSString *message = [NSString stringWithFormat:@"已经超出了最大可选数量限制:%ld", maxCount];
             UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"提示" message:message preferredStyle:UIAlertControllerStyleAlert];
             UIAlertAction *alertAction = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
@@ -201,20 +202,17 @@ static NSString *const cellID = @"cellID";
         assetModel.selectType = actionBtn.selected;
         
         [strongSelf callBackHandleWithAssetModel:assetModel];
-        if (assetModel.selectType == CHAssetModelSelectTypeUnSelect) {
+        if (assetModel.selectType == CHAssetSelectTypeUnSelect) {
             if ([strongSelf.albumModel.selectedAssetModelArray containsObject:assetModel]) {
                 [strongSelf.albumModel.selectedAssetModelArray removeObject:assetModel];
             }
-        } else if (assetModel.selectType == CHAssetModelSelectTypeSelected) {
+        } else if (assetModel.selectType == CHAssetSelectTypeSelected) {
             if (![strongSelf.albumModel.selectedAssetModelArray containsObject:assetModel]) {
                 [strongSelf.albumModel.selectedAssetModelArray addObject:assetModel];
             }
         }
-        strongSelf.albumModel.selectedAssetModelsCount += assetModel.selectType == CHAssetModelSelectTypeUnSelect ? (-1) : 1;
+        strongSelf.albumModel.selectedAssetModelsCount += assetModel.selectType == CHAssetSelectTypeUnSelect ? (-1) : 1;
         strongSelf.toolBar.count = strongSelf.albumModel.selectedAssetModelsCount;
-        [[CHImageManager defaultManager] imagesDataLengthWithAssetModels:strongSelf.albumModel.selectedAssetModelArray completionHandle:^(CHImageManager *defaultManager, CGFloat dataLength) {
-            strongSelf.toolBar.dataLength = dataLength;
-        }];
     };
     
     // 3. 返回cell
@@ -226,9 +224,8 @@ static NSString *const cellID = @"cellID";
 }
 
 #pragma mark - CHImageBrowserViewControllerDelegate
-- (void)imageBrowserViewController:(CHImageBrowserViewController *)imageBrowserViewController assetModelSelectTypeDidChange:(CHAssetModel *)assetModel index:(NSInteger)index {
-    
-    CHAssetModel *currentAssetModel = self.assetModelArray[index];
+- (void)imageBrowserViewController:(CHImageBrowserViewController *)imageBrowserViewController assetModelSelectTypeDidChange:(CHAsset *)assetModel index:(NSInteger)index {
+    CHAsset *currentAssetModel = self.assetModelArray[index];
     currentAssetModel.selectType = assetModel.selectType;
     [self.collectionView reloadItemsAtIndexPaths:@[[NSIndexPath indexPathForItem:index inSection:0]]];
     [self handleAssetModel:assetModel];
@@ -274,14 +271,7 @@ static NSString *const cellID = @"cellID";
                 }
                     break;
                     
-                case CHImageListBottomToolBarItemTypeFullImage: {
-                    [[CHImageManager defaultManager] imagesDataLengthWithAssetModels:strongSelf.albumModel.selectedAssetModelArray completionHandle:^(CHImageManager *defaultManager, CGFloat dataLength) {
-                        strongSelf.toolBar.dataLength = dataLength;
-                    }];
-                }
-                    break;
-                    
-                case CHImageListBottomToolBarItemTypeDone: {
+                case CHImageListBottomToolBarItemTypeSend: {
                     if ([strongSelf.delegate respondsToSelector:@selector(imageListViewControllerDidFinishSelect:)]) {
                         [strongSelf.delegate imageListViewControllerDidFinishSelect:strongSelf];
                     }

@@ -1,5 +1,5 @@
 //
-//  CHAlbumModel.h
+//  CHAlbum.h
 //  ImagePicker
 //
 //  Created by Charles on 16/10/10.
@@ -8,8 +8,8 @@
 
 #import <Foundation/Foundation.h>
 
-@class CHAssetModel;
-@interface CHAlbumModel : NSObject
+@class CHAsset;
+@interface CHAlbum : NSObject
 @property (nonatomic, strong) id fetchResult;
 @property (nonatomic, strong) NSString *albumName;
 @property (nonatomic, assign) NSInteger totalAssetModelsCount;

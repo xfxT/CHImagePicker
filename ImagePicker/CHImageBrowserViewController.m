@@ -19,11 +19,9 @@ static NSString *const cellID = @"cellID";
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
     self.navigationItem.title = @"大图预览";
     [self.collectionView registerClass:[CHImageBrowserViewCell class] forCellWithReuseIdentifier:cellID];
     [self.collectionView scrollToItemAtIndexPath:[NSIndexPath indexPathForItem:_currentIndex inSection:0] atScrollPosition:UICollectionViewScrollPositionLeft animated:NO];
-    
 }
 
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView {
@@ -43,7 +41,7 @@ static NSString *const cellID = @"cellID";
     cell.assetModel = self.assetModelArray[indexPath.item];
     
     __weak typeof(self) weakself = self;
-    cell.selectHandle = ^(CHImageBrowserViewCell *cell, CHAssetModel *assetModel) {
+    cell.selectHandle = ^(CHImageBrowserViewCell *cell, CHAsset *assetModel) {
         __strong typeof(self) strongSelf = weakself;
         if ([weakself.delegate respondsToSelector:@selector(imageBrowserViewController:assetModelSelectTypeDidChange:index:)]) {
             NSIndexPath *indexPath = [collectionView indexPathForCell:cell];
@@ -74,4 +72,5 @@ static NSString *const cellID = @"cellID";
     }
     return _collectionView;
 }
+
 @end

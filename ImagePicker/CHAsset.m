@@ -1,13 +1,13 @@
 //
-//  CHAssetModel.m
+//  CHAsset.m
 //  ImagePicker
 //
 //  Created by Charles on 16/10/10.
 //  Copyright © 2016年 Charles. All rights reserved.
 //
 
-#import "CHAssetModel.h"
+#import "CHAsset.h"
 
-@implementation CHAssetModel
+@implementation CHAsset
 
 @end

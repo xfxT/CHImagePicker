@@ -8,9 +8,25 @@
 
 #import <UIKit/UIKit.h>
 
-@class CHAssetModel,CHImageListViewCell ;
-typedef void(^CHImageListViewCellSelectHandle)(CHImageListViewCell *cell, CHAssetModel *assetModel, UIButton *actionBtn);
+@class CHImageListViewCell, CHAsset;
+
+/**
+ *  单个相册的相片列表的单个相片选中/未选中的回调类型
+ *
+ *  @param cell       单个相册的相片列表的单个相片所在的cell
+ *  @param assetModel 单个相册的相片列表的单个相片的数据模型
+ *  @param actionBtn  单个相册的相片列表的单个相片的选中/未选中按钮
+ */
+typedef void(^CHImageListViewCellSelectHandle)(CHImageListViewCell *cell, CHAsset *assetModel, UIButton *actionBtn);
+
 @interface CHImageListViewCell : UICollectionViewCell
-@property (nonatomic, strong) CHAssetModel *assetModel;
+/**
+ *  单个相册的相片列表的单个相片的数据模型
+ */
+@property (nonatomic, strong) CHAsset *assetModel;
+
+/**
+ *  单个相册的相片列表的单个相片选中/未选中的回调
+ */
 @property (nonatomic, copy) CHImageListViewCellSelectHandle selectHandle;
 @end

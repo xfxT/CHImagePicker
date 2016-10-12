@@ -8,16 +8,20 @@
 
 #import "CHImagePickerViewController.h"
 #import "CHAlbumListViewController.h"
-#import "CHImageManager.h"
-#import "CHAssetModel.h"
+#import "CHAlbumManager.h"
+#import "CHAsset.h"
+#import "CHImage.h"
+
 @implementation CHImagePickerViewController
 
 - (NSArray *)imageArray {
    
     NSMutableArray *mutableArray = [NSMutableArray new];
-    for (CHAssetModel *assetModel in self.assetModelArray) {
-        [[CHImageManager defaultManager] imageWithAssetModel:assetModel targetSize:[UIScreen mainScreen].bounds.size captureHandle:^(CHImageManager *defaultManager, UIImage *image, NSDictionary *imageInfo) {
-            [mutableArray addObject:image];
+    for (CHAsset *assetModel in self.assetModelArray) {
+        [[CHAlbumManager defaultManager] imageWithAssetModel:assetModel imageWidth:[UIScreen mainScreen].bounds.size.width captureHandle:^(CHAlbumManager *defaultManager, CHImage *image) {
+            if (image.image) {
+                [mutableArray addObject:image];
+            }
         }];
     }
     return mutableArray.copy;
@@ -33,20 +37,14 @@
 - (instancetype)init {
     self = [super initWithRootViewController:[[CHAlbumListViewController alloc] init]];
     if (self) {
-        self.maximumCount = 3;
-        self.sourceType = CHImagePickerViewControllerSourceTypeImage;
+        self.maximumCount = 9;
     }
     return self;
 }
 
 - (void)setMaximumCount:(NSInteger)maximumCount {
     _maximumCount = maximumCount;
-    [CHImageManager defaultManager].maximumCount = maximumCount;
-} 
-
-- (void)setSourceType:(CHImagePickerViewControllerSourceType)sourceType {
-    _sourceType = sourceType;
-    [CHImageManager defaultManager].sourceType = sourceType;
+    [CHAlbumManager defaultManager].maximumCount = maximumCount;
 }
 
 @end

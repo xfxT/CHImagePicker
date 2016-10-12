@@ -8,17 +8,47 @@
 
 #import <UIKit/UIKit.h>
 
+/**
+ *  item的类型
+ */
 typedef NS_ENUM(NSUInteger, CHImageListBottomToolBarItemType) {
+    /**
+     *  预览
+     */
     CHImageListBottomToolBarItemTypePreView,
-    CHImageListBottomToolBarItemTypeFullImage,
-    CHImageListBottomToolBarItemTypeDone,
+    /**
+     *  完成
+     */
+    CHImageListBottomToolBarItemTypeSend,
 };
+
 @class CHImageListBottomToolBar;
 
+/**
+ *  点击item的回调类型
+ *
+ *  @param toolBar  单个相册相片列表的底部选项栏
+ *  @param itemType 单个相册相片列表的底部选项栏item
+ */
 typedef void(^CHImageListBottomToolBarItemClickHandle)(CHImageListBottomToolBar *toolBar, CHImageListBottomToolBarItemType itemType);
+
 @interface CHImageListBottomToolBar : UIView
-+ (instancetype)toolBar;
-@property (nonatomic, assign) CGFloat dataLength;
-@property (nonatomic, assign) NSInteger count;
+
+/**
+ *  已经选择的相片的数量
+ */
+@property (nonatomic) NSInteger count;
+
+/**
+ *  点击item的回调
+ */
 @property (nonatomic, copy) CHImageListBottomToolBarItemClickHandle itemClickHandle;
+
+/**
+ *  构造方法
+ *
+ *  @return 单个相册相片列表的底部选项栏实例对象
+ */
++ (instancetype)toolBar;
+
 @end

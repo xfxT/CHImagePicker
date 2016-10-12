@@ -7,12 +7,12 @@
 //
 
 #import "CHAlbumListViewController.h"
-#import "CHImageManager.h"
+#import "CHAlbumManager.h"
 #import "CHAlbumListViewCell.h"
 #import "CHImageListViewController.h"
 #import "CHImagePickerViewController.h"
-#import "CHAssetModel.h"
-#import "CHAlbumModel.h"
+#import "CHAsset.h"
+#import "CHAlbum.h"
 
 @interface CHAlbumListViewController () <CHImageListViewControllerDelegate>
 @property (nonatomic, strong) NSArray *albumModelArray;
@@ -39,15 +39,15 @@ static NSString * const reuseIdentifier = @"Cell";
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    if ([CHImageManager defaultManager].authorizationStatusAuthorized) {
+    if ([CHAlbumManager defaultManager].authorizationStatusAuthorized) {
         // 获取所有的相册信息
         CHImagePickerViewController *imagePickerViewController = (CHImagePickerViewController *)self.navigationController;
-        [[CHImageManager defaultManager] allAlbumModelsWithCaptureHandle:^(CHImageManager *defaultManager, NSArray<CHAlbumModel *> *albumModelArray) {
+        [[CHAlbumManager defaultManager] allAlbumModelsWithCaptureHandle:^(CHAlbumManager *defaultManager, NSArray<CHAlbum *> *albumModelArray) {
             self.albumModelArray = albumModelArray;
-            for (CHAlbumModel *albumModel in self.albumModelArray) {
+            for (CHAlbum *albumModel in self.albumModelArray) {
                 NSMutableArray *selectedAssets = [NSMutableArray new];
                 NSMutableArray *selectedAssetURLs = [NSMutableArray new];
-                for (CHAssetModel *assetModel in imagePickerViewController.assetModelArray) {
+                for (CHAsset *assetModel in imagePickerViewController.assetModelArray) {
                     if ([assetModel.asset isKindOfClass:[PHAsset class]]) {
                         [selectedAssets addObject:assetModel.asset];
                     } else {
@@ -57,8 +57,8 @@ static NSString * const reuseIdentifier = @"Cell";
                 }
                 
                 // 获取单个相册的图片数组, 遍历图片数组，然后看看总的选中的中有没有该图片，如果有的话，那么标记
-                [[CHImageManager defaultManager] allAssetModelsWithAlbumModel:albumModel captureHandle:^(CHImageManager *defaultManager, NSArray<CHAssetModel *> *assetModelArray) {
-                    for (CHAssetModel *assetModel in assetModelArray) {
+                [[CHAlbumManager defaultManager] allAssetModelsWithAlbumModel:albumModel captureHandle:^(CHAlbumManager *defaultManager, NSArray<CHAsset *> *assetModelArray) {
+                    for (CHAsset *assetModel in assetModelArray) {
                         id asset = assetModel.asset;
                         if ([asset isKindOfClass:[PHAsset class]]) {
                             if ([selectedAssets containsObject:asset]) {
@@ -73,7 +73,7 @@ static NSString * const reuseIdentifier = @"Cell";
                         }
                     }
                 }];
-                
+            
             }
             [self.tableView reloadData];
         }];
@@ -110,7 +110,7 @@ static NSString * const reuseIdentifier = @"Cell";
     CHAlbumListViewCell *cell = [tableView dequeueReusableCellWithIdentifier:reuseIdentifier forIndexPath:indexPath];
     
     // 2. 设置数据
-    CHAlbumModel *albumModel = self.albumModelArray[indexPath.row];
+    CHAlbum *albumModel = self.albumModelArray[indexPath.row];
     cell.albumModel = albumModel;
     
     // 3. 返回cell
@@ -128,7 +128,7 @@ static NSString * const reuseIdentifier = @"Cell";
     [self.navigationController pushViewController:imageListViewController animated:YES];
 }
 
-- (void)imageListViewController:(CHImageListViewController *)imageListViewController didChangeSelectImageCountWithAlbumModel:(CHAlbumModel *)albumModel {
+- (void)imageListViewController:(CHImageListViewController *)imageListViewController didChangeSelectImageCountWithAlbumModel:(CHAlbum *)albumModel {
     
     NSInteger index = imageListViewController.currentIndex;
     NSMutableArray *mutableModels = self.albumModelArray.mutableCopy;

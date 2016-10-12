@@ -8,15 +8,18 @@
 
 #import "CHImagePickerBaseViewController.h"
 
-@class CHImageBrowserViewController;
-@class CHAssetModel;
+@class CHImageBrowserViewController, CHAsset;
+
 @protocol CHImageBrowserViewControllerDelegate <NSObject>
-- (void)imageBrowserViewController:(CHImageBrowserViewController *)imageBrowserViewController assetModelSelectTypeDidChange:(CHAssetModel *)assetModel index:(NSInteger)index;
+- (void)imageBrowserViewController:(CHImageBrowserViewController *)imageBrowserViewController
+     assetModelSelectTypeDidChange:(CHAsset *)assetModel
+                             index:(NSInteger)index;
 @end
 
 @interface CHImageBrowserViewController: CHImagePickerBaseViewController
+
 @property (nonatomic) NSInteger currentIndex;
-@property (nonatomic, strong) NSArray <CHAssetModel *>*assetModelArray;
-@property (nonatomic, strong) NSMutableArray *imageArray;
+@property (nonatomic, strong) NSArray <CHAsset *>*assetModelArray; 
 @property (nonatomic, weak) id <CHImageBrowserViewControllerDelegate> delegate;
+
 @end

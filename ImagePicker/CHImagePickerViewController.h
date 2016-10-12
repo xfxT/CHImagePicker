@@ -6,28 +6,44 @@
 //  Copyright © 2016年 Charles. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
-#import "CHImagePickerConstant.h"
+#import <UIKit/UIKit.h> 
 
-@class CHImagePickerViewController, CHAssetModel;
+@class CHImagePickerViewController, CHAsset;
+
 @protocol CHImagePickerViewControllerDelegate <NSObject>
+/**
+ *  选择相片完成回调事件
+ *
+ *  @param imagePickerViewController 相片选择控制器
+ *  @param imageArray                相片数组
+ */
 - (void)imagePickerViewController:(CHImagePickerViewController *)imagePickerViewController didFinishSelectWithImageArray:(NSArray <UIImage *>*)imageArray;
+
+/**
+ *  取消选择相片回调事件
+ *
+ *  @param imagePickerViewController 相片选择控制器
+ */
 - (void)imagePickerViewControllerDidCancel:(CHImagePickerViewController *)imagePickerViewController;
 @end
 
 @interface CHImagePickerViewController : UINavigationController
 
-// default is 1
+/**
+ *  最大可选相片数量 默认是9
+ */
 @property (nonatomic, assign) NSInteger maximumCount;
-
-// default is CHImagePickerViewControllerSourceTypeImage
-@property (nonatomic) CHImagePickerViewControllerSourceType sourceType;
 
 @property (nonatomic, weak) id <CHImagePickerViewControllerDelegate> imagePickerDelegate;
 
-@property (nonatomic, strong) NSMutableArray <CHAssetModel *>*assetModelArray;
+/**
+ *  相片数据模型数组
+ */
+@property (nonatomic, strong) NSMutableArray <CHAsset *>*assetModelArray;
 
-// the result or get the result from the imagePickerDelegate
+/**
+ *  UIImage实例对象数组
+ */
 @property (nonatomic, strong, readonly) NSArray <UIImage *>*imageArray;
 
 @end

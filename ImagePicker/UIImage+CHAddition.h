@@ -13,4 +13,5 @@
 @property (nonatomic, strong, readonly) UIImage *fixedOrientationImage;
 
 - (UIImage *)newImageWithTargetSize:(CGSize)targetSize;
+
 @end

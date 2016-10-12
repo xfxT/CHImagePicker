@@ -7,9 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		568C95551DAB350600AAA72C /* CHImageManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 568C95541DAB350600AAA72C /* CHImageManager.m */; };
-		568C95581DAB35E900AAA72C /* CHAlbumModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 568C95571DAB35E900AAA72C /* CHAlbumModel.m */; };
-		568C955B1DAB444600AAA72C /* CHAssetModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 568C955A1DAB444600AAA72C /* CHAssetModel.m */; };
+		565290261DAE2B050095D64C /* CHImage.m in Sources */ = {isa = PBXBuildFile; fileRef = 565290251DAE2B050095D64C /* CHImage.m */; };
+		568C95551DAB350600AAA72C /* CHAlbumManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 568C95541DAB350600AAA72C /* CHAlbumManager.m */; };
+		568C95581DAB35E900AAA72C /* CHAlbum.m in Sources */ = {isa = PBXBuildFile; fileRef = 568C95571DAB35E900AAA72C /* CHAlbum.m */; };
+		568C955B1DAB444600AAA72C /* CHAsset.m in Sources */ = {isa = PBXBuildFile; fileRef = 568C955A1DAB444600AAA72C /* CHAsset.m */; };
 		568C95611DAB4CA900AAA72C /* CHAlbumListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 568C95601DAB4CA900AAA72C /* CHAlbumListViewController.m */; };
 		568C95641DAB4CC400AAA72C /* CHImagePickerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 568C95631DAB4CC400AAA72C /* CHImagePickerViewController.m */; };
 		568C95681DAB521000AAA72C /* CHAlbumListViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 568C95661DAB521000AAA72C /* CHAlbumListViewCell.m */; };
@@ -23,10 +24,8 @@
 		568C95CC1DABA6A600AAA72C /* CHDemoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 568C95CB1DABA6A600AAA72C /* CHDemoViewController.m */; };
 		568C95CF1DABA97D00AAA72C /* CHActionSheet.m in Sources */ = {isa = PBXBuildFile; fileRef = 568C95CE1DABA97D00AAA72C /* CHActionSheet.m */; };
 		568C95D51DABABDC00AAA72C /* CHImageListBottomToolBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 568C95D41DABABDC00AAA72C /* CHImageListBottomToolBar.m */; };
-		568C95D81DACC84400AAA72C /* CHVideoManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 568C95D71DACC84400AAA72C /* CHVideoManager.m */; };
 		568C95E41DACCBA700AAA72C /* CHFileManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 568C95E31DACCBA700AAA72C /* CHFileManager.m */; };
 		568C95E71DACD1C300AAA72C /* UIImage+CHAddition.m in Sources */ = {isa = PBXBuildFile; fileRef = 568C95E61DACD1C300AAA72C /* UIImage+CHAddition.m */; };
-		568C95EA1DACD65900AAA72C /* CHVideoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 568C95E91DACD65900AAA72C /* CHVideoViewController.m */; };
 		56C0D9041DAB287A002C7D5C /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 56C0D9031DAB287A002C7D5C /* main.m */; };
 		56C0D9071DAB287A002C7D5C /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 56C0D9061DAB287A002C7D5C /* AppDelegate.m */; };
 		56C0D90A1DAB287A002C7D5C /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 56C0D9091DAB287A002C7D5C /* ViewController.m */; };
@@ -55,12 +54,14 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		568C95531DAB350600AAA72C /* CHImageManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CHImageManager.h; sourceTree = "<group>"; };
-		568C95541DAB350600AAA72C /* CHImageManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CHImageManager.m; sourceTree = "<group>"; };
-		568C95561DAB35E900AAA72C /* CHAlbumModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CHAlbumModel.h; sourceTree = "<group>"; };
-		568C95571DAB35E900AAA72C /* CHAlbumModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CHAlbumModel.m; sourceTree = "<group>"; };
-		568C95591DAB444600AAA72C /* CHAssetModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CHAssetModel.h; sourceTree = "<group>"; };
-		568C955A1DAB444600AAA72C /* CHAssetModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CHAssetModel.m; sourceTree = "<group>"; };
+		565290241DAE2B050095D64C /* CHImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CHImage.h; sourceTree = "<group>"; };
+		565290251DAE2B050095D64C /* CHImage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CHImage.m; sourceTree = "<group>"; };
+		568C95531DAB350600AAA72C /* CHAlbumManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CHAlbumManager.h; sourceTree = "<group>"; };
+		568C95541DAB350600AAA72C /* CHAlbumManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CHAlbumManager.m; sourceTree = "<group>"; };
+		568C95561DAB35E900AAA72C /* CHAlbum.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CHAlbum.h; sourceTree = "<group>"; };
+		568C95571DAB35E900AAA72C /* CHAlbum.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CHAlbum.m; sourceTree = "<group>"; };
+		568C95591DAB444600AAA72C /* CHAsset.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CHAsset.h; sourceTree = "<group>"; };
+		568C955A1DAB444600AAA72C /* CHAsset.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CHAsset.m; sourceTree = "<group>"; };
 		568C955F1DAB4CA900AAA72C /* CHAlbumListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CHAlbumListViewController.h; sourceTree = "<group>"; };
 		568C95601DAB4CA900AAA72C /* CHAlbumListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CHAlbumListViewController.m; sourceTree = "<group>"; };
 		568C95621DAB4CC400AAA72C /* CHImagePickerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CHImagePickerViewController.h; sourceTree = "<group>"; };
@@ -85,15 +86,10 @@
 		568C95CE1DABA97D00AAA72C /* CHActionSheet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CHActionSheet.m; sourceTree = "<group>"; };
 		568C95D31DABABDC00AAA72C /* CHImageListBottomToolBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CHImageListBottomToolBar.h; sourceTree = "<group>"; };
 		568C95D41DABABDC00AAA72C /* CHImageListBottomToolBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CHImageListBottomToolBar.m; sourceTree = "<group>"; };
-		568C95D61DACC84400AAA72C /* CHVideoManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CHVideoManager.h; sourceTree = "<group>"; };
-		568C95D71DACC84400AAA72C /* CHVideoManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CHVideoManager.m; sourceTree = "<group>"; };
 		568C95E21DACCBA700AAA72C /* CHFileManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CHFileManager.h; sourceTree = "<group>"; };
 		568C95E31DACCBA700AAA72C /* CHFileManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CHFileManager.m; sourceTree = "<group>"; };
 		568C95E51DACD1C300AAA72C /* UIImage+CHAddition.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+CHAddition.h"; sourceTree = "<group>"; };
 		568C95E61DACD1C300AAA72C /* UIImage+CHAddition.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+CHAddition.m"; sourceTree = "<group>"; };
-		568C95E81DACD65900AAA72C /* CHVideoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CHVideoViewController.h; sourceTree = "<group>"; };
-		568C95E91DACD65900AAA72C /* CHVideoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CHVideoViewController.m; sourceTree = "<group>"; };
-		568C95EB1DACDB4C00AAA72C /* CHImagePickerConstant.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CHImagePickerConstant.h; sourceTree = "<group>"; };
 		56C0D8FF1DAB287A002C7D5C /* ImagePicker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ImagePicker.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		56C0D9031DAB287A002C7D5C /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		56C0D9051DAB287A002C7D5C /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -162,7 +158,6 @@
 			children = (
 				56C0D9051DAB287A002C7D5C /* AppDelegate.h */,
 				56C0D9061DAB287A002C7D5C /* AppDelegate.m */,
-				568C95EB1DACDB4C00AAA72C /* CHImagePickerConstant.h */,
 				568C95CD1DABA97D00AAA72C /* CHActionSheet.h */,
 				568C95CE1DABA97D00AAA72C /* CHActionSheet.m */,
 				568C95CA1DABA6A600AAA72C /* CHDemoViewController.h */,
@@ -173,18 +168,16 @@
 				568C95C81DAB8B4E00AAA72C /* CHImagePickerBaseViewController.m */,
 				56C0D9081DAB287A002C7D5C /* ViewController.h */,
 				56C0D9091DAB287A002C7D5C /* ViewController.m */,
-				568C95561DAB35E900AAA72C /* CHAlbumModel.h */,
-				568C95571DAB35E900AAA72C /* CHAlbumModel.m */,
-				568C95591DAB444600AAA72C /* CHAssetModel.h */,
-				568C955A1DAB444600AAA72C /* CHAssetModel.m */,
-				568C95531DAB350600AAA72C /* CHImageManager.h */,
-				568C95541DAB350600AAA72C /* CHImageManager.m */,
+				565290241DAE2B050095D64C /* CHImage.h */,
+				565290251DAE2B050095D64C /* CHImage.m */,
+				568C95561DAB35E900AAA72C /* CHAlbum.h */,
+				568C95571DAB35E900AAA72C /* CHAlbum.m */,
+				568C95591DAB444600AAA72C /* CHAsset.h */,
+				568C955A1DAB444600AAA72C /* CHAsset.m */,
+				568C95531DAB350600AAA72C /* CHAlbumManager.h */,
+				568C95541DAB350600AAA72C /* CHAlbumManager.m */,
 				568C95E51DACD1C300AAA72C /* UIImage+CHAddition.h */,
 				568C95E61DACD1C300AAA72C /* UIImage+CHAddition.m */,
-				568C95D61DACC84400AAA72C /* CHVideoManager.h */,
-				568C95D71DACC84400AAA72C /* CHVideoManager.m */,
-				568C95E81DACD65900AAA72C /* CHVideoViewController.h */,
-				568C95E91DACD65900AAA72C /* CHVideoViewController.m */,
 				568C95751DAB566100AAA72C /* CHImageListViewController.h */,
 				568C95761DAB566100AAA72C /* CHImageListViewController.m */,
 				568C95D31DABABDC00AAA72C /* CHImageListBottomToolBar.h */,
@@ -373,15 +366,13 @@
 			files = (
 				568C95C91DAB8B4E00AAA72C /* CHImagePickerBaseViewController.m in Sources */,
 				568C95CC1DABA6A600AAA72C /* CHDemoViewController.m in Sources */,
-				568C95EA1DACD65900AAA72C /* CHVideoViewController.m in Sources */,
-				568C95551DAB350600AAA72C /* CHImageManager.m in Sources */,
-				568C955B1DAB444600AAA72C /* CHAssetModel.m in Sources */,
+				568C95551DAB350600AAA72C /* CHAlbumManager.m in Sources */,
+				568C955B1DAB444600AAA72C /* CHAsset.m in Sources */,
 				568C95641DAB4CC400AAA72C /* CHImagePickerViewController.m in Sources */,
 				568C95D51DABABDC00AAA72C /* CHImageListBottomToolBar.m in Sources */,
 				568C95E71DACD1C300AAA72C /* UIImage+CHAddition.m in Sources */,
-				568C95D81DACC84400AAA72C /* CHVideoManager.m in Sources */,
 				56C0D90A1DAB287A002C7D5C /* ViewController.m in Sources */,
-				568C95581DAB35E900AAA72C /* CHAlbumModel.m in Sources */,
+				568C95581DAB35E900AAA72C /* CHAlbum.m in Sources */,
 				568C95E41DACCBA700AAA72C /* CHFileManager.m in Sources */,
 				568C95781DAB566100AAA72C /* CHImageListViewController.m in Sources */,
 				568C957C1DAB72C700AAA72C /* CHImageBrowserViewController.m in Sources */,
@@ -392,6 +383,7 @@
 				568C95611DAB4CA900AAA72C /* CHAlbumListViewController.m in Sources */,
 				568C95681DAB521000AAA72C /* CHAlbumListViewCell.m in Sources */,
 				56C0D9041DAB287A002C7D5C /* main.m in Sources */,
+				565290261DAE2B050095D64C /* CHImage.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
