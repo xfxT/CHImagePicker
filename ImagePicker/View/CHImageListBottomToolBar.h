@@ -38,11 +38,14 @@ typedef void(^CHImageListBottomToolBarItemClickHandle)(CHImageListBottomToolBar 
  *  已经选择的相片的数量
  */
 @property (nonatomic) NSInteger count;
+- (void)setCount:(NSInteger)count animated:(BOOL)animated;
 
 /**
  *  点击item的回调
  */
 @property (nonatomic, copy) CHImageListBottomToolBarItemClickHandle itemClickHandle;
+
+@property (nonatomic) BOOL hiddenPreViewItem;
 
 /**
  *  构造方法

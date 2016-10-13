@@ -16,11 +16,10 @@
                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="q47-vT-Opi">
                         <rect key="frame" x="0.0" y="0.0" width="198" height="240"/>
                     </imageView>
-                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hzQ-dp-jxB">
-                        <rect key="frame" x="149" y="10" width="39" height="28"/>
-                        <fontDescription key="fontDescription" type="system" pointSize="13"/>
-                        <state key="normal" title="未选中"/>
-                        <state key="selected" title="选中">
+                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hzQ-dp-jxB">
+                        <rect key="frame" x="166" y="5" width="27" height="27"/>
+                        <state key="normal" image="picture_normal"/>
+                        <state key="selected" image="picture_selected">
                             <color key="titleColor" red="1" green="0.28236825005989896" blue="0.23066439767413371" alpha="1" colorSpace="calibratedRGB"/>
                         </state>
                         <connections>
@@ -33,10 +32,10 @@
             <constraints>
                 <constraint firstAttribute="bottom" secondItem="q47-vT-Opi" secondAttribute="bottom" id="9uG-wf-gtu"/>
                 <constraint firstAttribute="trailing" secondItem="q47-vT-Opi" secondAttribute="trailing" id="LCC-St-x8D"/>
-                <constraint firstAttribute="trailing" secondItem="hzQ-dp-jxB" secondAttribute="trailing" constant="10" id="dTi-aQ-geH"/>
+                <constraint firstAttribute="trailing" secondItem="hzQ-dp-jxB" secondAttribute="trailing" constant="5" id="dTi-aQ-geH"/>
                 <constraint firstItem="q47-vT-Opi" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" id="daF-94-TCn"/>
                 <constraint firstItem="q47-vT-Opi" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" id="qIw-gb-CVS"/>
-                <constraint firstItem="hzQ-dp-jxB" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" constant="10" id="wht-7D-Ib4"/>
+                <constraint firstItem="hzQ-dp-jxB" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" constant="5" id="wht-7D-Ib4"/>
             </constraints>
             <size key="customSize" width="198" height="240"/>
             <connections>
@@ -46,4 +45,8 @@
             <point key="canvasLocation" x="959" y="579"/>
         </collectionViewCell>
     </objects>
+    <resources>
+        <image name="picture_normal" width="27" height="27"/>
+        <image name="picture_selected" width="27" height="27"/>
+    </resources>
 </document>

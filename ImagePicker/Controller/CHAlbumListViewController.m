@@ -73,7 +73,6 @@ static NSString * const reuseIdentifier = @"Cell";
                         }
                     }
                 }];
-            
             }
             [self.tableView reloadData];
         }];
@@ -91,8 +90,13 @@ static NSString * const reuseIdentifier = @"Cell";
     }
 }
 
-- (void)dismiss {
-    [self.navigationController dismissViewControllerAnimated:YES completion:nil];
+- (void)dismiss { 
+    CHImagePickerViewController *imagePickerViewController = (CHImagePickerViewController *)self.navigationController;
+    if ([imagePickerViewController.imagePickerDelegate respondsToSelector:@selector(imagePickerControllerDidCancel:)]) {
+        [imagePickerViewController.imagePickerDelegate imagePickerViewControllerDidCancel:imagePickerViewController];
+    }
+    
+    [imagePickerViewController dismissViewControllerAnimated:YES completion:nil];
 }
 
 #pragma mark - Table view data source
@@ -123,8 +127,10 @@ static NSString * const reuseIdentifier = @"Cell";
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     CHImageListViewController *imageListViewController = [[CHImageListViewController alloc] initWithCurrentIndex:indexPath.row];
-    imageListViewController.albumModel = self.albumModelArray[indexPath.row];
+    CHAlbum *albumModel = self.albumModelArray[indexPath.row];
     imageListViewController.delegate = self;
+    imageListViewController.albumModel = albumModel;
+    imageListViewController.navigationItem.title = albumModel.albumName;
     [self.navigationController pushViewController:imageListViewController animated:YES];
 }
 

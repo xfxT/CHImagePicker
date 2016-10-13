@@ -41,6 +41,8 @@ static NSString *const cellID = @"cellID";
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"取消" style:UIBarButtonItemStylePlain target:self action:@selector(cancel)];
+     
     UINib *cellNib = [UINib nibWithNibName:NSStringFromClass([CHImageListViewCell class]) bundle:nil];
     [self.collectionView registerNib:cellNib forCellWithReuseIdentifier:cellID];
     
@@ -95,6 +97,15 @@ static NSString *const cellID = @"cellID";
     }];
     
     self.toolBar.count = self.albumModel.selectedAssetModelsCount;
+}
+
+- (void)cancel {
+    CHImagePickerViewController *imagePickerViewController = (CHImagePickerViewController *)self.navigationController;
+    if ([imagePickerViewController.imagePickerDelegate respondsToSelector:@selector(imagePickerControllerDidCancel:)]) {
+        [imagePickerViewController.imagePickerDelegate imagePickerViewControllerDidCancel:imagePickerViewController];
+    }
+    
+    [imagePickerViewController dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (void)viewDidLayoutSubviews {
@@ -198,21 +209,34 @@ static NSString *const cellID = @"cellID";
             return ;
         }
         
-        actionBtn.selected = !actionBtn.selected;
-        assetModel.selectType = actionBtn.selected;
+        [UIView animateWithDuration:0.1 animations:^{
+            actionBtn.transform = CGAffineTransformMakeScale(1.2, 1.2);
+        } completion:^(BOOL finished) {
+            if (finished) {
+                [UIView animateWithDuration:0.1 animations:^{
+                    actionBtn.transform = CGAffineTransformMakeScale(1.0, 1.0);
+                } completion:^(BOOL finished) {
+                    if (finished) {
+                        actionBtn.selected = !actionBtn.selected;
+                        assetModel.selectType = actionBtn.selected;
+                        
+                        [strongSelf callBackHandleWithAssetModel:assetModel];
+                        if (assetModel.selectType == CHAssetSelectTypeUnSelect) {
+                            if ([strongSelf.albumModel.selectedAssetModelArray containsObject:assetModel]) {
+                                [strongSelf.albumModel.selectedAssetModelArray removeObject:assetModel];
+                            }
+                        } else if (assetModel.selectType == CHAssetSelectTypeSelected) {
+                            if (![strongSelf.albumModel.selectedAssetModelArray containsObject:assetModel]) {
+                                [strongSelf.albumModel.selectedAssetModelArray addObject:assetModel];
+                            }
+                        }
+                        strongSelf.albumModel.selectedAssetModelsCount += assetModel.selectType == CHAssetSelectTypeUnSelect ? (-1) : 1;
+                        strongSelf.toolBar.count = strongSelf.albumModel.selectedAssetModelsCount;
+                    }
+                }];
+            }
+        }];
         
-        [strongSelf callBackHandleWithAssetModel:assetModel];
-        if (assetModel.selectType == CHAssetSelectTypeUnSelect) {
-            if ([strongSelf.albumModel.selectedAssetModelArray containsObject:assetModel]) {
-                [strongSelf.albumModel.selectedAssetModelArray removeObject:assetModel];
-            }
-        } else if (assetModel.selectType == CHAssetSelectTypeSelected) {
-            if (![strongSelf.albumModel.selectedAssetModelArray containsObject:assetModel]) {
-                [strongSelf.albumModel.selectedAssetModelArray addObject:assetModel];
-            }
-        }
-        strongSelf.albumModel.selectedAssetModelsCount += assetModel.selectType == CHAssetSelectTypeUnSelect ? (-1) : 1;
-        strongSelf.toolBar.count = strongSelf.albumModel.selectedAssetModelsCount;
     };
     
     // 3. 返回cell
@@ -229,7 +253,9 @@ static NSString *const cellID = @"cellID";
     currentAssetModel.selectType = assetModel.selectType;
     
     self.albumModel.selectedAssetModelsCount += currentAssetModel.selectType == CHAssetSelectTypeUnSelect ? (-1) : 1;
-    self.toolBar.count = self.albumModel.selectedAssetModelsCount;
+    NSInteger count = self.albumModel.selectedAssetModelsCount;
+
+    [self.toolBar setCount:count animated:NO];
     
     [self.collectionView reloadItemsAtIndexPaths:@[[NSIndexPath indexPathForItem:index inSection:0]]];
     [self handleAssetModel:assetModel];

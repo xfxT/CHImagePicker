@@ -144,12 +144,25 @@
 
 - (void)actionBtnClick:(UIButton *)btn {
     
-    btn.selected = !btn.selected;
-    self.assetModel.selectType = btn.selected;
+    [UIView animateWithDuration:0.1 animations:^{
+        btn.transform = CGAffineTransformMakeScale(1.2, 1.2);
+    } completion:^(BOOL finished) {
+        if (finished) {
+            [UIView animateWithDuration:0.1 animations:^{
+                btn.transform = CGAffineTransformMakeScale(1.0, 1.0);
+            } completion:^(BOOL finished) {
+                if (finished) {
+                    btn.selected = !btn.selected;
+                    self.assetModel.selectType = btn.selected;
+                    
+                    if (self.selectHandle) {
+                        self.selectHandle(self, self.assetModel);
+                    }
+                }
+            }];
+        }
+    }];
     
-    if (self.selectHandle) {
-        self.selectHandle(self, self.assetModel);
-    }
 }
 
 - (UIView *)viewForZoomingInScrollView:(UIScrollView *)scrollView {
@@ -167,11 +180,8 @@
         UIButton *actionBtn = [UIButton buttonWithType:UIButtonTypeCustom];
         [self.contentView addSubview:actionBtn];
         _actionBtn = actionBtn;
-        actionBtn.titleLabel.font = [UIFont boldSystemFontOfSize:14];
-        [actionBtn setTitle:@"未选中" forState:UIControlStateNormal];
-        [actionBtn setTitleColor:[UIColor blueColor] forState:UIControlStateNormal];
-        [actionBtn setTitle:@"选中" forState:UIControlStateSelected];
-        [actionBtn setTitleColor:[UIColor redColor] forState:UIControlStateSelected];
+        [actionBtn setImage:[UIImage imageNamed:@"picture_normal"] forState:UIControlStateNormal];
+        [actionBtn setImage:[UIImage imageNamed:@"picture_selected"] forState:UIControlStateSelected];
         [actionBtn addTarget:self action:@selector(actionBtnClick:) forControlEvents:UIControlEventTouchUpInside];
     }
     return _actionBtn;

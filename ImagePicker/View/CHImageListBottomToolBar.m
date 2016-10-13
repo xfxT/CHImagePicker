@@ -34,18 +34,43 @@
     return [[self alloc] init];
 }
 
+- (void)setHiddenPreViewItem:(BOOL)hiddenPreViewItem {
+    _hiddenPreViewItem = hiddenPreViewItem;
+    self.preBtn.hidden = hiddenPreViewItem;
+}
+
 /**
  *  设置已经选择的相片数量
  *
  *  @param count 已经选择的相片的数量
  */
 - (void)setCount:(NSInteger)count {
-    _count = count;
-    [self.sendLeftCountL setText:[NSString stringWithFormat:@"%ld", count]];
+    [self setCount:count animated:YES];
 }
 
-- (void)btnClick:(UIButton *)btn {
-    
+- (void)setCount:(NSInteger)count animated:(BOOL)animated {
+    _count = count;
+    if (animated) {
+        [UIView animateWithDuration:0.1 animations:^{
+            self.sendLeftCountL.transform = CGAffineTransformMakeScale(1.1, 1.1);
+        } completion:^(BOOL finished) {
+            if (finished) {
+                [UIView animateWithDuration:0.1 animations:^{
+                    self.sendLeftCountL.transform = CGAffineTransformMakeScale(1.0, 1.0);
+                } completion:^(BOOL finished) {
+                    if (finished) {
+                        [self.sendLeftCountL setText:[NSString stringWithFormat:@"%ld", count]];
+                    }
+                }];
+            }
+        }];
+    } else {
+        [self.sendLeftCountL setText:[NSString stringWithFormat:@"%ld", count]];
+    }
+ 
+
+}
+- (void)btnClick:(UIButton *)btn { 
     if (self.itemClickHandle) {
         self.itemClickHandle(self, btn.tag - 1);
     }
@@ -71,6 +96,8 @@
     CGFloat sendLeftCountLH = 30;
     self.sendLeftCountL.frame = CGRectMake(sendLeftCountLX, sendLeftCountLY, sendLeftCountLW, sendLeftCountLH);
     
+    self.sendLeftCountL.center = CGPointMake(self.sendLeftCountL.center.x, self.sendBtn.center.y);
+    
 }
 
 - (UIButton *)preBtn {
@@ -93,7 +120,7 @@
         [self addSubview:send];
         _sendBtn = send;
         [send setTitle:@"完成" forState:UIControlStateNormal];
-        [send setTitleColor:[UIColor greenColor] forState:UIControlStateNormal];
+        [send setTitleColor:[UIColor colorWithRed:0.09f green:0.73f blue:0.18f alpha:1.00f] forState:UIControlStateNormal];
         send.titleLabel.font = [UIFont systemFontOfSize:13];
         [send addTarget:self action:@selector(btnClick:) forControlEvents:UIControlEventTouchUpInside];
         send.tag = 2;
@@ -109,7 +136,7 @@
         sendLeftCount.textColor = [UIColor whiteColor];
         sendLeftCount.font = [UIFont boldSystemFontOfSize:13];
         sendLeftCount.textAlignment = NSTextAlignmentCenter;
-        sendLeftCount.backgroundColor = [UIColor greenColor];
+        sendLeftCount.backgroundColor = [UIColor colorWithRed:0.09f green:0.73f blue:0.18f alpha:1.00f];
         sendLeftCount.layer.cornerRadius = 15.0;
         sendLeftCount.layer.masksToBounds = YES;
         sendLeftCount.layer.shouldRasterize = YES;

@@ -47,7 +47,7 @@
     if (albumModel.selectedAssetModelsCount == 0) {
         self.selectCountL.backgroundColor = [UIColor clearColor];
     } else {
-        self.selectCountL.backgroundColor = [UIColor orangeColor];
+        self.selectCountL.backgroundColor = [UIColor colorWithRed:0.09f green:0.73f blue:0.18f alpha:1.00f];
     }
     self.selectCountL.text = albumModel.selectedAssetModelsCount > 0 ? [NSString stringWithFormat:@"%ld", albumModel.selectedAssetModelsCount] : @"";
     
