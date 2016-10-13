@@ -134,6 +134,7 @@
         cell.textLabel.text = [self.subTitlesArray objectAtIndex:indexPath.row];
     }else {
         cell.textLabel.text = self.cancelTitle;
+        cell.textLabel.textColor = [UIColor redColor];
     }
     cell.textLabel.textAlignment = NSTextAlignmentCenter;
     return cell;

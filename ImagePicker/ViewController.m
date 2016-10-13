@@ -20,9 +20,7 @@
     [super viewDidLoad];
     self.navigationItem.title = @"获取图片";
 }
-
-- (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
-    
+- (IBAction)captureImageBtnClick:(UIButton *)sender {
     CHActionSheet *actionSheet = [CHActionSheet actionSheetWithCancelTitle:@"取消" alertTitle:@"选取图片或视频" SubTitles:@"拍照", @"从相册中获取图片", @"从相册中获取视频", nil];
     [actionSheet setActionSheetItemClickHandle:^(CHActionSheet *actionSheet, NSInteger currentIndex, NSString *title) {
         if (currentIndex == 0) {
@@ -38,7 +36,6 @@
     }];
     [actionSheet show];
 }
-
 - (void)imagePickerViewController:(CHImagePickerViewController *)imagePickerViewController didFinishSelectWithImageArray:(NSArray<UIImage *> *)imageArray {
     NSLog(@"didFinishSelectWithImageArray : %@", imageArray);
 }

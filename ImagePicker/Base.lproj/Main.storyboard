@@ -16,7 +16,22 @@
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="l3q-cZ-IvP">
+                                <rect key="frame" x="255" y="285" width="90" height="30"/>
+                                <state key="normal" title="点击选取图片">
+                                    <color key="titleColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="captureImageBtnClick:" destination="BYZ-38-t0r" eventType="touchUpInside" id="9oZ-BM-Esh"/>
+                                </connections>
+                            </button>
+                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="l3q-cZ-IvP" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="Xwu-vi-q4w"/>
+                            <constraint firstItem="l3q-cZ-IvP" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="brg-Di-cdM"/>
+                        </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="mdB-gT-xOA"/>
                 </viewController>
